@@ -27,7 +27,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import sessionmaker, declarative_base, Session, relationship
 
-from passlib.context import CryptContext
+import bcrypt as _bcrypt
 from jose import JWTError, jwt
 from pydantic import BaseModel
 
@@ -106,25 +106,37 @@ Base.metadata.create_all(bind=engine)
 # ─────────────────────────────────────────
 # AUTH HELPERS
 # ─────────────────────────────────────────
-# passlib + bcrypt 4.x compatibility fix
-import warnings
-warnings.filterwarnings("ignore", ".*bcrypt.*")
-try:
-    import bcrypt
-    # bcrypt 4.x changed the API; patch passlib to work with it
-    if not hasattr(bcrypt, '__about__'):
-        bcrypt.__about__ = type('about', (), {'__version__': bcrypt.__version__})()
-except Exception:
-    pass
+oauth2 = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
-pwd_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2  = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
-
+# ── Password helpers using bcrypt directly (no passlib) ──────────
 def hash_password(pw: str) -> str:
-    return pwd_ctx.hash(pw.encode('utf-8')[:72].decode('utf-8', errors='ignore'))
+    """Hash a password using bcrypt directly."""
+    pw_bytes = pw.encode("utf-8")[:72]   # bcrypt hard limit
+    salt = _bcrypt.gensalt(rounds=12)
+    return _bcrypt.hashpw(pw_bytes, salt).decode("utf-8")
 
 def verify_password(pw: str, hashed: str) -> bool:
-    return pwd_ctx.verify(pw.encode('utf-8')[:72].decode('utf-8', errors='ignore'), hashed)
+    """Verify a password against its bcrypt hash."""
+    try:
+        pw_bytes = pw.encode("utf-8")[:72]
+        return _bcrypt.checkpw(pw_bytes, hashed.encode("utf-8"))
+    except Exception:
+        return False
+
+# ── Password strength validation (done in Python, not just JS) ───
+import re as _re
+
+def validate_password(pw: str) -> str | None:
+    """Return an error message string, or None if password is valid."""
+    if len(pw) < 6:
+        return "Password must be at least 6 characters."
+    if len(pw.encode("utf-8")) > 72:
+        return "Password is too long (max 72 characters)."
+    if not _re.search(r"[A-Za-z]", pw):
+        return "Password must contain at least one letter."
+    if not _re.search(r"[0-9]", pw):
+        return "Password must contain at least one number."
+    return None  # valid
 
 def create_token(data: dict) -> str:
     to_encode = data.copy()
@@ -389,8 +401,19 @@ app.add_middleware(CORSMiddleware,
 # ── AUTH ──────────────────────────────────
 @app.post("/api/auth/register", response_model=TokenResponse)
 def register(req: RegisterRequest, db: Session = Depends(get_db)):
+    # Validate name
+    if not req.name.strip():
+        raise HTTPException(400, "Name cannot be empty.")
+    # Validate email format
+    if not _re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", req.email):
+        raise HTTPException(400, "Please enter a valid email address.")
+    # Validate password strength
+    pw_error = validate_password(req.password)
+    if pw_error:
+        raise HTTPException(400, pw_error)
+    # Check duplicate
     if db.query(User).filter(User.email == req.email).first():
-        raise HTTPException(400, "Email already registered")
+        raise HTTPException(400, "An account with this email already exists.")
     user = User(name=req.name, email=req.email, hashed_pw=hash_password(req.password))
     db.add(user)
     db.commit()
@@ -539,7 +562,15 @@ def simulate(req: SimulateRequest, user: User = Depends(get_current_user), db: S
 def list_simulations(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     runs = db.query(SimulationRun).filter(SimulationRun.user_id == user.id)\
              .order_by(SimulationRun.created_at.desc()).limit(10).all()
-    return [{"id": r.id, "created_at": r.created_at, "scenario_ids": r.scenario_ids} for r in runs]
+    return [
+        {
+            "id": r.id,
+            # Add Z suffix so frontend knows it's UTC
+            "created_at": r.created_at.strftime("%Y-%m-%dT%H:%M:%SZ") if r.created_at else None,
+            "scenario_ids": r.scenario_ids
+        }
+        for r in runs
+    ]
 
 @app.get("/api/simulations/{run_id}")
 def get_simulation(run_id: int, user: User = Depends(get_current_user), db: Session = Depends(get_db)):

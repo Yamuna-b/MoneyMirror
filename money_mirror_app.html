@@ -85,7 +85,11 @@ body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-he
 .fhint{font-size:.64rem;color:var(--text3);margin-top:4px}
 .auth-btn{width:100%;background:linear-gradient(135deg,#8b7cf8,#5b9cf6);color:#fff;border:none;padding:13px;border-radius:50px;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .3s;font-family:'Sora',sans-serif;margin-top:6px}
 .auth-btn:hover{opacity:.9;transform:translateY(-1px)}
-.auth-error{font-size:.72rem;color:var(--red);margin-top:8px;text-align:center}
+.auth-error{
+  font-size:.75rem;color:var(--red);margin-top:10px;text-align:center;
+  background:rgba(240,88,88,0.08);border:1px solid rgba(240,88,88,0.25);
+  padding:9px 14px;border-radius:8px;line-height:1.5;
+}
 
 /* ══ APP SHELL ══ */
 #page-app{min-height:100vh;display:flex;flex-direction:column}
@@ -543,7 +547,8 @@ document.getElementById('auth-modal').addEventListener('click', e => {
 
 async function doLogin() {
   const email = val('login-email'), pw = val('login-password');
-  if (!email || !pw) return showAuthError('login', 'Please fill in all fields.');
+  if (!email.trim()) return showAuthError('login', 'Please enter your email address.');
+  if (!pw)           return showAuthError('login', 'Please enter your password.');
   showSpinner('Signing you in...');
   try {
     const body = 'username=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(pw);
@@ -560,13 +565,32 @@ async function doLogin() {
 }
 async function doRegister() {
   const name = val('reg-name'), email = val('reg-email'), pw = val('reg-password');
-  if (!name || !email || !pw) return showAuthError('reg', 'Please fill in all fields.');
-  if (pw.length < 6) return showAuthError('reg', 'Password must be at least 6 characters.');
-  showSpinner('Creating your account…');
+
+  // Frontend validation - friendly messages, not JS errors
+  if (!name.trim())  return showAuthError('reg', 'Please enter your name.');
+  if (!email.trim()) return showAuthError('reg', 'Please enter your email.');
+  if (!pw)           return showAuthError('reg', 'Please enter a password.');
+
+  // Email format check
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
+    return showAuthError('reg', 'Please enter a valid email address (e.g. you@gmail.com).');
+
+  // Password rules
+  if (pw.length < 6)
+    return showAuthError('reg', 'Password must be at least 6 characters.');
+  if (!/[A-Za-z]/.test(pw))
+    return showAuthError('reg', 'Password must contain at least one letter (e.g. Yamuna@11).');
+  if (!/[0-9]/.test(pw))
+    return showAuthError('reg', 'Password must contain at least one number (e.g. Yamuna@11).');
+
+  showSpinner('Creating your account...');
   try {
     const res = await api('POST', '/api/auth/register', { name, email, password: pw }, false);
     onAuthSuccess(res);
-  } catch(e) { showAuthError('reg', e.message); }
+  } catch(e) {
+    // e.message comes from backend - always a clean string now
+    showAuthError('reg', e.message);
+  }
   finally { hideSpinner(); }
 }
 function onAuthSuccess(data) {
@@ -582,7 +606,7 @@ function onAuthSuccess(data) {
 function showAuthError(form, msg) {
   const el = document.getElementById(form === 'login' ? 'login-error' : 'reg-error');
   el.textContent = msg; el.classList.remove('hidden');
-  setTimeout(() => el.classList.add('hidden'), 4000);
+  setTimeout(() => el.classList.add('hidden'), 6000);
 }
 function doLogout() {
   localStorage.removeItem('mm_token'); localStorage.removeItem('mm_user');
@@ -1198,7 +1222,12 @@ async function loadHistory() {
       <div class="hist-item" onclick="loadHistoryRun(${r.id})">
         <div style="font-size:1.2rem">🔮</div>
         <div>
-          <div class="hi-date">${new Date(r.created_at).toLocaleString('en-IN', {dateStyle:'medium',timeStyle:'short'})}</div>
+          <div class="hi-date">${(() => {
+            // SQLite stores UTC without 'Z' — add it so browser converts to local time
+            const raw = r.created_at.includes('T') ? r.created_at : r.created_at.replace(' ', 'T');
+            const d   = new Date(raw.endsWith('Z') ? raw : raw + 'Z');
+            return d.toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short'});
+          })()}</div>
           <div class="hi-title">Simulation with ${r.scenario_ids?.length || 0} scenario${r.scenario_ids?.length !== 1 ? 's' : ''}</div>
         </div>
         <div style="margin-left:auto;color:var(--text3);font-size:.7rem">View →</div>
