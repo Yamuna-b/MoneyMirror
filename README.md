@@ -1,141 +1,125 @@
-# 🪞 Money Mirror — Personal Financial Digital Twin
+# Money Mirror
 
-A full-stack web app that lets UPI-first Indian users simulate their financial future,
-test what-if scenarios, and understand their money safety before committing to decisions.
+**Personal financial digital twin for Indian UPI-era money life** — enter monthly income, EMIs, fixed and variable expenses, and savings; add what‑if scenarios (salary cut, job loss, new EMI, rent hike, lifestyle change); run a deterministic month‑by‑month simulation and see balance over time, safety runway, risk label, and short explanations.
 
----
+Screenshots (optional): save `docs/screenshots/dashboard.png` and embed with `![Dashboard](docs/screenshots/dashboard.png)`.
 
-## ⚡ Quick Start
+## Features (focused)
 
-### 1. Install dependencies
+| Area | What you get |
+|------|----------------|
+| Profile | Income, EMIs (list), fixed + variable expenses, savings, 6‑month emergency‑fund target (default), 12‑month horizon (default) |
+| Scenarios | Salary cut, job loss, new EMI, rent hike (₹/month **or** %), lifestyle upgrade |
+| Simulation | Baseline + any selected scenarios over N months |
+| Results | Balance chart, runway + risk, 2–3 sentence insights per scenario |
+| History | Last **3** runs with scenario names + baseline risk |
 
-```bash
-pip install fastapi "uvicorn[standard]" sqlalchemy "passlib[bcrypt]" "python-jose[cryptography]" pydantic
-```
+Risk thresholds and targets are **configurable via environment variables** (see `.env.example`).
 
-### 2. Put both files in the same folder
+## Quick start
 
-```
-your-folder/
-├── money_mirror_backend.py
-└── money_mirror_app.html
-```
-
-### 3. Run the backend
+### pip
 
 ```bash
+cd Money_Mirror
+pip install -r requirements.txt
 python money_mirror_backend.py
 ```
 
-### 4. Open the app
+Open **http://localhost:8000** — register, fill **My Profile**, use **Save & run baseline**, then add scenarios and **Run simulation**.
 
-Visit: **http://localhost:8000**
-
----
-
-## 🏗️ Architecture
-
-```
-Frontend  →  money_mirror_app.html  (served by FastAPI at /)
-Backend   →  money_mirror_backend.py  (FastAPI + SQLite)
-Database  →  money_mirror.db  (auto-created on first run)
-```
-
-### API Endpoints
-
-| Method | Path                         | Description                    |
-|--------|------------------------------|--------------------------------|
-| POST   | /api/auth/register           | Create account                 |
-| POST   | /api/auth/login              | Sign in, get JWT token         |
-| GET    | /api/auth/me                 | Get current user               |
-| GET    | /api/profile                 | Load financial profile         |
-| PUT    | /api/profile                 | Save financial profile         |
-| GET    | /api/scenarios               | List saved scenarios           |
-| POST   | /api/scenarios               | Create new scenario            |
-| PUT    | /api/scenarios/{id}          | Update scenario                |
-| DELETE | /api/scenarios/{id}          | Delete scenario                |
-| POST   | /api/simulate                | Run simulation                 |
-| GET    | /api/simulations             | Simulation history (last 10)   |
-| GET    | /api/simulations/{id}        | Load a past simulation         |
-| GET    | /api/scenarios/templates     | Built-in scenario templates    |
-
----
-
-## ✨ Features
-
-- **Login & accounts** — JWT-based auth, data saved per user
-- **Financial profile** — income, savings, rent, EMIs, lifestyle expenses
-- **Safety target** — set a target like "3 months of expenses as safety"
-  and see exactly how far you are and the ₹ gap
-- **Scenario library** — save named scenarios (Salary Cut, Job Loss, New EMI, Rent Hike, etc.)
-- **Side-by-side comparison** — see Baseline vs Scenario A vs Scenario B with
-  "Safest option" and "Most risky" badges
-- **4 safety metrics** — Safety Runway, DTI, Emergency Fund Ratio, Savings Ratio
-- **Monte Carlo simulation** — 500 runs with randomised income/expense variation,
-  shows p10/p50/p90 runway range and probability of staying safe
-- **Simulation history** — last 10 runs saved and reloadable
-- **Personalised insights & advice** — plain-language explanations with your actual numbers
-
----
-
-## 🚀 Deploying to Production
-
-### Option A: Simple VPS (EC2, DigitalOcean)
+### uv (optional)
 
 ```bash
-# Set a real secret key
-export MM_SECRET_KEY="your-strong-random-secret-here"
-
-# Optional: use PostgreSQL instead of SQLite
-export MM_DATABASE_URL="postgresql://user:password@host/dbname"
-
-# Run with gunicorn for production
-pip install gunicorn
-gunicorn money_mirror_backend:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
+uv pip install -r requirements.txt
+uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-Then put Nginx in front:
-```nginx
-server {
-    listen 80;
-    server_name yourdomain.com;
-    location / {
-        proxy_pass http://127.0.0.1:8000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
+### Docker
+
+```bash
+docker build -t money-mirror .
+docker run -p 8000:8000 -e MM_SECRET_KEY=your-secret money-mirror
+```
+
+Copy `.env.example` to `.env` and adjust values as needed.
+
+## Project layout
+
+| Module | Role |
+|--------|------|
+| `config.py` | Thresholds and defaults from `MM_*` env vars |
+| `schemas.py` | Pydantic request/response models |
+| `simulation.py` | Pure cash-flow and risk logic (no FastAPI) |
+| `database.py` | SQLAlchemy models + SQLite engine |
+| `auth_utils.py` | bcrypt + JWT helpers |
+| `deps.py` | DB session + `get_current_user` |
+| `routes.py` | FastAPI routes calling `simulation` |
+| `main.py` | App factory, CORS, static `money_mirror_app.html` |
+| `money_mirror_app.html` | Single-page UI |
+
+## API: `POST /api/simulate`
+
+**Auth:** `Authorization: Bearer <token>` (obtain via `POST /api/auth/login`).
+
+**Request**
+
+```json
+{
+  "scenario_ids": [1, 2]
 }
 ```
 
-### Option B: Docker
+Use `[]` for **baseline only**. Scenario IDs belong to the logged-in user.
 
-```dockerfile
-FROM python:3.12-slim
-WORKDIR /app
-RUN pip install fastapi "uvicorn[standard]" sqlalchemy "passlib[bcrypt]" "python-jose[cryptography]" pydantic
-COPY money_mirror_backend.py money_mirror_app.html ./
-ENV MM_SECRET_KEY="change-this-in-production"
-EXPOSE 8000
-CMD ["uvicorn", "money_mirror_backend:app", "--host", "0.0.0.0", "--port", "8000"]
+**Response (abbreviated)**
+
+```json
+{
+  "labels": ["Now", "Apr '26", "May '26"],
+  "baseline": {
+    "balances": [120000, 118000, 116000],
+    "metrics": {
+      "runway": 10,
+      "risk_level": "comfortable",
+      "dti": 0.22,
+      "emergency_fund_ratio": 4.5
+    },
+    "explanation": "Your baseline plan keeps a safety runway..."
+  },
+  "scenarios": [
+    {
+      "id": 1,
+      "name": "−30% salary",
+      "scenario_type": "salary-cut",
+      "balances": [120000, 115000, 110000],
+      "metrics": { "runway": 6, "risk_level": "caution" },
+      "explanation": "Compared to baseline, this scenario cuts..."
+    }
+  ],
+  "insights": ["..."],
+  "advice": []
+}
 ```
 
----
+Full interactive docs: **http://localhost:8000/docs**
 
-## 📊 Simulation Algorithms
+## Opinionated defaults
 
-| Algorithm | Description |
-|-----------|-------------|
-| Discrete-Time Cash-Flow | `balance(t+1) = balance(t) + income(t) - expenses(t)` applied month by month |
-| Scenario Overlays | Each scenario modifies income/expenses for a defined range of months |
-| Safety Metrics | DTI, Emergency Fund Ratio, Savings Ratio, Runway computed per simulation |
-| Risk Classification | Rule-based: `emergency_fund < 3` or `runway < 2` or `DTI > 0.6` → High Risk |
-| Monte Carlo | 500 runs with Gaussian noise on income (σ=4%) and variable expenses (σ=8%) |
+| Setting | Default |
+|---------|---------|
+| Forecast horizon | 12 months |
+| Emergency fund **target** | 6 months of expenses |
+| Min comfortable balance | ₹10,000 |
 
----
+Scenario templates (also in the UI under **Quick add**) include e.g. −30% salary for 6 months, 3‑month job loss, +₹2,000 rent, etc. Override via `.env` and `config.py` keys.
 
-## 🔒 Privacy
+## Seed data (optional)
 
-- No raw transaction logs or SMS data stored
-- Only user-entered summarised financial data
-- All simulation runs stored per user, encrypted via JWT sessions
-- Change `MM_SECRET_KEY` before any public deployment
+```bash
+python seed_data.py
+```
+
+## License
+
+Use and modify for your hackathon or personal project as needed.

@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-/* ══════════════════════ DESIGN TOKENS ══════════════════════ */
 :root {
   --bg:      #0b0d14;
   --s1:      #10131e;
@@ -38,7 +37,6 @@ html{scroll-behavior:smooth;font-size:15px}
 body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-height:100vh;overflow-x:hidden}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#252a3d;border-radius:2px}
 
-/* ══ UTILITY ══ */
 .hidden{display:none!important}
 .flex{display:flex}.fac{align-items:center}.fjc{justify-content:center}.fgap8{gap:8px}.fgap12{gap:12px}.fgap16{gap:16px}
 .fw600{font-weight:600}.fs12{font-size:.75rem}.fs13{font-size:.8rem}.fs14{font-size:.85rem}
@@ -50,7 +48,6 @@ body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-he
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 
-/* ══ LANDING ══ */
 #page-landing{
   min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:40px 24px;position:relative;overflow:hidden;
@@ -69,7 +66,6 @@ body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-he
 .land-chips{display:flex;gap:10px;margin-top:48px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1}
 .lchip{display:flex;align-items:center;gap:7px;background:var(--s1);border:1px solid var(--border);padding:9px 16px;border-radius:50px;font-size:.72rem;color:var(--text2)}
 
-/* ══ AUTH MODAL ══ */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(6px)}
 .modal{background:var(--s1);border:1px solid var(--border2);border-radius:20px;padding:36px;width:100%;max-width:420px;position:relative}
 .modal-title{font-size:1.4rem;font-weight:700;margin-bottom:4px}
@@ -91,12 +87,13 @@ body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-he
   padding:9px 14px;border-radius:8px;line-height:1.5;
 }
 
-/* ══ APP SHELL ══ */
 #page-app{min-height:100vh;display:flex;flex-direction:column}
 .topbar{position:sticky;top:0;z-index:200;background:rgba(11,13,20,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .topbar-logo{font-size:1.05rem;font-weight:800;letter-spacing:-.02em}
 .topbar-logo span{color:var(--green)}
-.topbar-nav{display:flex;gap:2px}
+.topbar-nav-wrap{display:flex;align-items:center;flex:1;justify-content:center}
+.nav-toggle{display:none;align-items:center;justify-content:center;width:40px;height:40px;background:var(--s2);border:1px solid var(--border);border-radius:10px;color:var(--text);cursor:pointer;font-size:1.1rem}
+.topbar-nav{display:flex;gap:2px;flex-wrap:wrap;justify-content:center}
 .tnav{padding:7px 14px;border-radius:8px;font-size:.72rem;font-weight:500;cursor:pointer;color:var(--text2);transition:all .2s;background:none;border:none;font-family:'Sora',sans-serif}
 .tnav:hover{color:var(--text);background:var(--s2)}
 .tnav.on{color:var(--text);background:var(--s2)}
@@ -106,15 +103,12 @@ body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-he
 .logout-btn{font-size:.68rem;color:var(--text3);cursor:pointer;background:none;border:none;font-family:'Sora',sans-serif;transition:color .2s}
 .logout-btn:hover{color:var(--red)}
 
-/* ══ MAIN AREA ══ */
 .app-content{flex:1;max-width:1100px;margin:0 auto;width:100%;padding:28px 24px 80px}
 
-/* PAGE VIEWS */
 .page-view{display:none;animation:fadeUp .35s ease}
 .page-view.on{display:block}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/* ══ SHARED COMPONENTS ══ */
 .page-header{margin-bottom:28px}
 .page-title{font-size:1.5rem;font-weight:700;margin-bottom:5px;letter-spacing:-.02em}
 .page-sub{font-size:.8rem;color:var(--text2);line-height:1.6}
@@ -128,7 +122,6 @@ body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-he
 .tag-blue{background:var(--bd);color:var(--blue);border:1px solid rgba(91,156,246,.2)}
 .tag-violet{background:var(--vd);color:var(--violet);border:1px solid rgba(139,124,248,.2)}
 
-/* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:50px;font-size:.78rem;font-weight:600;cursor:pointer;border:none;font-family:'Sora',sans-serif;transition:all .25s}
 .btn-primary{background:linear-gradient(135deg,#8b7cf8,#5b9cf6);color:#fff;box-shadow:0 4px 16px rgba(139,124,248,.25)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(139,124,248,.35)}
@@ -140,11 +133,9 @@ body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-he
 .btn-danger{background:var(--rd);color:var(--red);border:1px solid rgba(240,88,88,.2)}
 .btn-danger:hover{background:rgba(240,88,88,.2)}
 
-/* FORM */
 .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
 .form-group{display:flex;flex-direction:column;gap:5px}
 
-/* RANGE SLIDER */
 .range-group{margin-bottom:14px}
 .rr{display:flex;justify-content:space-between;margin-bottom:7px;align-items:center}
 .rl{font-size:.72rem;color:var(--text2)}
@@ -153,7 +144,6 @@ input[type=range]{width:100%;-webkit-appearance:none;height:3px;background:var(-
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--violet);box-shadow:0 2px 8px rgba(139,124,248,.4);cursor:pointer;transition:transform .2s}
 input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
 
-/* EMI ROW */
 .emi-row{display:grid;grid-template-columns:1fr 140px 34px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
 .emi-row:last-child{border-bottom:none}
 .emi-rm{background:none;border:none;color:var(--text3);cursor:pointer;font-size:1rem;padding:4px;border-radius:6px;transition:color .2s}
@@ -161,27 +151,23 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
 .add-emi-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px dashed var(--border2);color:var(--text2);padding:8px 14px;border-radius:var(--rsm);font-size:.72rem;font-weight:500;cursor:pointer;transition:all .2s;font-family:'Sora',sans-serif;margin-top:8px}
 .add-emi-btn:hover{border-color:var(--violet);color:var(--violet)}
 
-/* PROGRESS */
 .prog{height:5px;background:var(--s3);border-radius:3px;overflow:hidden;margin-top:6px}
 .prog-fill{height:100%;border-radius:3px;transition:width 1.2s ease}
 .pf-g{background:linear-gradient(90deg,#1fd89e,#12a872)}
 .pf-y{background:linear-gradient(90deg,#f0c040,#d4a020)}
 .pf-r{background:linear-gradient(90deg,#f05858,#c03030)}
 
-/* METRIC CARD */
 .mcard{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;position:relative;overflow:hidden}
 .mcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--mc-accent,var(--violet))}
 .mc-lbl{font-size:.62rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
 .mc-val{font-size:1.75rem;font-weight:700;line-height:1;margin-bottom:5px}
 .mc-sub{font-size:.68rem;color:var(--text2);line-height:1.4}
 
-/* INSIGHT BOX */
 .insight{background:var(--s2);border:1px solid var(--border);border-left:3px solid var(--violet);border-radius:var(--radius);padding:18px 20px}
 .insight-label{font-size:.62rem;font-weight:600;color:var(--violet);text-transform:uppercase;letter-spacing:.08em;margin-bottom:9px}
 .insight-text{font-size:.85rem;line-height:1.75;color:var(--text2);font-family:'Lora',serif;font-style:italic}
 .insight-text strong{color:var(--text);font-style:normal;font-family:'Sora',sans-serif}
 
-/* SAFETY TARGET BAR */
 .target-bar-wrap{background:var(--s2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px}
 .tb-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .tb-title{font-size:.78rem;font-weight:600}
@@ -191,7 +177,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
 .tb-target-line{position:absolute;top:-4px;height:18px;width:2px;background:var(--yellow);border-radius:1px;z-index:2}
 .tb-labels{display:flex;justify-content:space-between;font-size:.6rem;color:var(--text3);margin-top:6px}
 
-/* CHART */
 .chart-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
 .chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .chart-title{font-size:.85rem;font-weight:600}
@@ -200,7 +185,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
 .cl-dot{width:8px;height:8px;border-radius:50%}
 .chart-wrap{position:relative;height:250px}
 
-/* SCENARIOS LIST */
 .scenario-list{display:flex;flex-direction:column;gap:10px}
 .scard{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;align-items:center;gap:16px;transition:border-color .25s;cursor:pointer}
 .scard:hover{border-color:var(--border2)}
@@ -212,7 +196,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
 .scard-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
 .scard.selected .scard-check{background:var(--violet);border-color:var(--violet)}
 
-/* COMPARISON TABLE */
 .comp-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
 .comp-table{width:100%;border-collapse:collapse;min-width:600px}
 .comp-table th{padding:12px 16px;text-align:left;background:var(--s2);font-size:.65rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--border)}
@@ -223,7 +206,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
 .risk-badge{font-size:.58rem;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-left:6px;letter-spacing:.06em}
 .rb-worst{font-size:.58px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:var(--rd);color:var(--red);border:1px solid rgba(240,88,88,.25);margin-left:6px;letter-spacing:.06em}
 
-/* ADVICE CARD */
 .advice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
 .adv{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-sm,10px);padding:16px}
 .adv-icon{font-size:1.2rem;margin-bottom:6px}
@@ -233,7 +215,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
 .adv.warn{border-color:rgba(240,192,64,.15)}
 .adv.bad{border-color:rgba(240,88,88,.2)}
 
-/* SAVED SCENARIOS MANAGE */
 .saved-item{display:flex;align-items:center;gap:12px;padding:14px;background:var(--s1);border:1px solid var(--border);border-radius:var(--rsm);transition:border-color .2s}
 .saved-item:hover{border-color:var(--border2)}
 .si-icon{font-size:1.2rem;width:36px;height:36px;background:var(--s2);border-radius:8px;display:flex;align-items:center;justify-content:center}
@@ -241,37 +222,41 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
 .si-meta{font-size:.66rem;color:var(--text3)}
 .si-actions{margin-left:auto;display:flex;gap:6px}
 
-/* HISTORY */
 .hist-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--s1);border:1px solid var(--border);border-radius:var(--rsm);cursor:pointer;transition:all .2s}
 .hist-item:hover{border-color:var(--border2);background:var(--s2)}
 .hi-date{font-size:.7rem;color:var(--text3);margin-bottom:3px}
 .hi-title{font-size:.8rem;font-weight:500}
 .hi-badges{display:flex;gap:6px;margin-top:4px}
 
-/* SPINNER */
 .spin-overlay{position:fixed;inset:0;background:rgba(11,13,20,.85);display:flex;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(8px)}
 .spinner{width:44px;height:44px;border:3px solid var(--border2);border-top-color:var(--violet);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spin-text{font-size:.82rem;color:var(--text2);text-align:center}
 
-/* EMPTY STATE */
 .empty{text-align:center;padding:48px 24px;color:var(--text3)}
 .empty-icon{font-size:2.5rem;margin-bottom:12px}
 .empty-text{font-size:.82rem;line-height:1.6}
 
-/* TOAST */
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--s3);border:1px solid var(--border2);padding:11px 22px;border-radius:50px;font-size:.78rem;color:var(--text);z-index:1000;animation:toastIn .3s ease;white-space:nowrap}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
-/* MONTE CARLO */
 .mc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
 .mc-stat{background:var(--s2);border-radius:var(--rsm);padding:14px;text-align:center}
 .mc-stat-val{font-size:1.4rem;font-weight:700;margin-bottom:4px}
 .mc-stat-lbl{font-size:.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
 
-/* RESPONSIVE */
 @media(max-width:768px){
-  .topbar-nav{display:none}
+  .nav-toggle{display:inline-flex}
+  .topbar-nav-wrap{
+    position:fixed;top:58px;left:0;right:0;z-index:199;
+    background:rgba(11,13,20,.98);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    box-shadow:0 12px 32px rgba(0,0,0,.45);
+    padding:12px 16px 16px;display:none;flex-direction:column;align-items:stretch
+  }
+  .topbar-nav-wrap.mobile-open{display:flex}
+  .topbar-nav{flex-direction:column;width:100%}
+  .tnav{width:100%;text-align:left;padding:12px 14px}
   .grid2,.grid3,.grid4{grid-template-columns:1fr}
   .comp-table th,.comp-table td{padding:10px 12px}
   .mc-row{grid-template-columns:repeat(2,1fr)}
@@ -284,7 +269,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
 </head>
 <body>
 
-<!-- ══════════════════ LANDING ══════════════════ -->
 <div id="page-landing">
   <div class="land-glow lg1"></div>
   <div class="land-glow lg2"></div>
@@ -293,15 +277,14 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
   <p class="land-sub" style="position:relative;z-index:1">Your personal financial digital twin. Test salary cuts, new EMIs, rent hikes — and see exactly how safe your money is over the next 6–24 months.</p>
   <button class="land-cta" style="position:relative;z-index:1" onclick="openAuth()">Get started free →</button>
   <div class="land-chips">
-    <div class="lchip">🪞 Financial Digital Twin</div>
-    <div class="lchip">🔮 6–24 Month Forecast</div>
-    <div class="lchip">🎯 Safety Target Tracker</div>
-    <div class="lchip">📊 Save & Compare Plans</div>
+    <div class="lchip">Financial Digital Twin</div>
+    <div class="lchip">6–24 Month Forecast</div>
+    <div class="lchip">Safety Target Tracker</div>
+    <div class="lchip">Save & Compare Plans</div>
     <div class="lchip">🇮🇳 UPI + EMI India</div>
   </div>
 </div>
 
-<!-- ══════════════════ AUTH MODAL ══════════════════ -->
 <div class="modal-overlay hidden" id="auth-modal">
   <div class="modal">
     <div class="modal-tabs">
@@ -339,16 +322,18 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
   </div>
 </div>
 
-<!-- ══════════════════ APP ══════════════════ -->
 <div id="page-app" class="hidden">
   <nav class="topbar">
     <div class="topbar-logo">Money<span>Mirror</span></div>
-    <div class="topbar-nav">
-      <button class="tnav on" id="nav-dashboard" onclick="showPage('dashboard')">Dashboard</button>
-      <button class="tnav" id="nav-profile" onclick="showPage('profile')">My Profile</button>
-      <button class="tnav" id="nav-scenarios" onclick="showPage('scenarios')">Scenarios</button>
-      <button class="tnav" id="nav-simulate" onclick="showPage('simulate')">Simulate</button>
-      <button class="tnav" id="nav-history" onclick="showPage('history')">History</button>
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Open menu" onclick="toggleMobileNav()">☰</button>
+    <div class="topbar-nav-wrap" id="topbar-nav-wrap">
+      <div class="topbar-nav">
+        <button class="tnav on" id="nav-dashboard" onclick="showPage('dashboard')">Dashboard</button>
+        <button class="tnav" id="nav-profile" onclick="showPage('profile')">My Profile</button>
+        <button class="tnav" id="nav-scenarios" onclick="showPage('scenarios')">Scenarios</button>
+        <button class="tnav" id="nav-simulate" onclick="showPage('simulate')">Simulate</button>
+        <button class="tnav" id="nav-history" onclick="showPage('history')">History</button>
+      </div>
     </div>
     <div class="topbar-right">
       <div class="user-chip">
@@ -372,11 +357,13 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
       </div>
     </div>
 
-    <!-- ── PROFILE ── -->
     <div class="page-view" id="page-profile">
       <div class="page-header">
         <h1 class="page-title">My Financial Profile</h1>
         <p class="page-sub">Enter your income, expenses, and EMIs. This is the foundation of your financial twin.</p>
+        <p class="page-sub mt8" style="padding:12px 14px;background:var(--s2);border-radius:var(--rsm);border:1px solid var(--border);max-width:720px">
+          We only use monthly summary numbers you type here — no bank SMS or screen scraping. Your data stays with this account for planning.
+        </p>
       </div>
 
       <div class="card mb16">
@@ -392,7 +379,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
         <div class="form-grid">
           <div class="form-group"><label class="flabel">Current Savings</label><input class="finput" type="number" id="p-savings" placeholder="e.g. 120000"/><span class="fhint">Total liquid savings today</span></div>
           <div class="form-group"><label class="flabel">Minimum Comfortable Balance</label><input class="finput" type="number" id="p-min-balance" placeholder="e.g. 10000"/><span class="fhint">Below this feels like stress</span></div>
-          <div class="form-group"><label class="flabel">Safety Target (months of expenses)</label><input class="finput" type="number" id="p-safety-target" placeholder="e.g. 3" step="0.5"/><span class="fhint">e.g. 3 = 3 months of expenses as buffer</span></div>
+          <div class="form-group"><label class="flabel">Safety Target (months of expenses)</label><input class="finput" type="number" id="p-safety-target" placeholder="e.g. 6" step="0.5"/><span class="fhint">Default 6 months — how many months of spending you want covered by savings</span></div>
           <div class="form-group">
             <label class="flabel">Forecast Horizon</label>
             <select class="finput" id="p-horizon">
@@ -432,13 +419,12 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
         <button class="add-emi-btn" onclick="addEMIRow()">+ Add EMI / Loan</button>
       </div>
 
-      <div class="flex fgap12">
-        <button class="btn btn-primary" onclick="saveProfile()">💾 Save Profile</button>
-        <button class="btn btn-green" onclick="saveProfile(true)">🔮 Save & Simulate</button>
+      <div class="flex fgap12" style="flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="saveProfile()">💾 Save profile</button>
+        <button class="btn btn-green" onclick="saveProfile(true)">🔮 Save &amp; run baseline</button>
       </div>
     </div>
 
-    <!-- ── SCENARIOS ── -->
     <div class="page-view" id="page-scenarios">
       <div class="page-header">
         <div class="flex fac" style="justify-content:space-between;flex-wrap:wrap;gap:12px">
@@ -446,9 +432,19 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
           <button class="btn btn-primary" onclick="openNewScenario()">+ New scenario</button>
         </div>
       </div>
+      <div class="card mb16">
+        <div class="card-title">Quick add — opinionated defaults</div>
+        <p class="fs12 c2 mb12">One tap to add a common what-if. You can edit details after.</p>
+        <div class="flex fgap8" style="flex-wrap:wrap">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('salary-cut')">−30% salary · 6 mo</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('job-loss')">3‑month job loss</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('new-emi')">New EMI ₹3,000</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('rent-hike')">+₹2,000 rent</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('lifestyle-up')">Lifestyle +15%</button>
+        </div>
+      </div>
       <div id="scenarios-list-content"></div>
 
-      <!-- New/Edit Scenario Panel -->
       <div id="scenario-editor" class="hidden">
         <div class="divider"></div>
         <div class="card mt16">
@@ -466,7 +462,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
               <option value="new-emi">🏍️ New EMI</option>
               <option value="rent-hike">🏠 Rent Hike</option>
               <option value="lifestyle-up">✨ Lifestyle Upgrade</option>
-              <option value="medical">🏥 Medical Emergency</option>
             </select>
           </div>
           <div id="sc-params"></div>
@@ -478,49 +473,35 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
       </div>
     </div>
 
-    <!-- ── SIMULATE ── -->
     <div class="page-view" id="page-simulate">
       <div class="page-header">
         <h1 class="page-title">Run Simulation</h1>
         <p class="page-sub">Select which scenarios you want to test and compare against your baseline plan.</p>
       </div>
+      <p class="fs13 c2 mb12" style="max-width:640px">Select any saved scenarios below, or leave none selected to run a <strong>baseline-only</strong> forecast.</p>
       <div id="sim-scenarios-list" class="scenario-list mb24"></div>
-      <div class="card mb16">
-        <div class="card-title">Options</div>
-        <label class="flex fac fgap12" style="cursor:pointer">
-          <input type="checkbox" id="opt-mc" style="width:16px;height:16px;accent-color:var(--violet)"/>
-          <div><div class="fs14 fw600">Run Monte Carlo simulation</div><div class="fs12 c2 mt4">Runs 500 simulations with random variation to show probability ranges for your safety runway</div></div>
-        </label>
-      </div>
-      <button class="btn btn-green" style="font-size:.9rem;padding:14px 32px" onclick="runSimulation()">🔮 Simulate my financial future</button>
+      <button class="btn btn-green" style="font-size:.9rem;padding:14px 32px" onclick="runSimulation()">🔮 Run simulation</button>
     </div>
 
-    <!-- ── HISTORY ── -->
     <div class="page-view" id="page-history">
       <div class="page-header">
         <h1 class="page-title">Simulation History</h1>
-        <p class="page-sub">Your past 10 simulations. Click any to reload the results.</p>
+        <p class="page-sub">Last 3 runs. Click a row to reload results on the dashboard.</p>
       </div>
       <div id="history-list" class="flex fgap8" style="flex-direction:column"></div>
     </div>
 
-  </div><!-- app-content -->
-</div><!-- page-app -->
+  </div>
+</div>
 
-<!-- Spinner -->
 <div class="spin-overlay hidden" id="spinner">
   <div><div class="spinner"></div><div class="spin-text" id="spin-text">Running simulation…</div></div>
 </div>
 
 <script>
-/* ══════════════════════════════════════════════
-   CONFIG — empty string = relative URLs (same server)
-══════════════════════════════════════════════ */
+
 const API = '';
 
-/* ══════════════════════════════════════════════
-   STATE
-══════════════════════════════════════════════ */
 let token = localStorage.getItem('mm_token') || null;
 let user  = JSON.parse(localStorage.getItem('mm_user') || 'null');
 let emiCount = 0;
@@ -529,9 +510,6 @@ let editingScenarioId = null;
 let charts = {};
 let lastResult = null;
 
-/* ══════════════════════════════════════════════
-   LANDING / AUTH MODAL
-══════════════════════════════════════════════ */
 function openAuth() {
   show('auth-modal');
 }
@@ -566,16 +544,13 @@ async function doLogin() {
 async function doRegister() {
   const name = val('reg-name'), email = val('reg-email'), pw = val('reg-password');
 
-  // Frontend validation - friendly messages, not JS errors
   if (!name.trim())  return showAuthError('reg', 'Please enter your name.');
   if (!email.trim()) return showAuthError('reg', 'Please enter your email.');
   if (!pw)           return showAuthError('reg', 'Please enter a password.');
 
-  // Email format check
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
     return showAuthError('reg', 'Please enter a valid email address (e.g. you@gmail.com).');
 
-  // Password rules
   if (pw.length < 6)
     return showAuthError('reg', 'Password must be at least 6 characters.');
   if (!/[A-Za-z]/.test(pw))
@@ -588,7 +563,6 @@ async function doRegister() {
     const res = await api('POST', '/api/auth/register', { name, email, password: pw }, false);
     onAuthSuccess(res);
   } catch(e) {
-    // e.message comes from backend - always a clean string now
     showAuthError('reg', e.message);
   }
   finally { hideSpinner(); }
@@ -610,15 +584,13 @@ function showAuthError(form, msg) {
 }
 function doLogout() {
   localStorage.removeItem('mm_token'); localStorage.removeItem('mm_user');
-  token = null; user = null;
+  try { sessionStorage.removeItem('mm_last_sim'); } catch (e) {}
+  token = null; user = null; lastResult = null;
   document.getElementById('page-landing').style.display = 'flex';
   document.getElementById('page-app').classList.add('hidden');
   destroyCharts();
 }
 
-/* ══════════════════════════════════════════════
-   API HELPER
-══════════════════════════════════════════════ */
 async function api(method, path, body = null, auth = true) {
   const headers = { 'Content-Type': 'application/json' };
   if (auth && token) headers['Authorization'] = `Bearer ${token}`;
@@ -631,53 +603,63 @@ async function api(method, path, body = null, auth = true) {
   return data;
 }
 
-/* ══════════════════════════════════════════════
-   APP INIT
-══════════════════════════════════════════════ */
 async function initApp() {
-  // set user display
   if (user) {
     document.getElementById('user-name-display').textContent = user.name;
     document.getElementById('user-avatar').textContent = user.name[0].toUpperCase();
   }
-  // load profile
   try { await loadProfile(); } catch(e) {}
-  // load scenarios
   try { await loadScenarios(); } catch(e) {}
-  // load history
   try { await loadHistory(); } catch(e) {}
+  try {
+    const raw = sessionStorage.getItem('mm_last_sim');
+    if (raw && !lastResult) {
+      lastResult = JSON.parse(raw);
+      if (lastResult && lastResult.baseline && lastResult.baseline.balances)
+        renderDashboard(lastResult);
+    }
+  } catch (e) {}
 }
 
-// Auto-login if token exists
 if (token && user) {
   hide('page-landing'); show('page-app');
   initApp();
 }
 
-/* ══════════════════════════════════════════════
-   NAVIGATION
-══════════════════════════════════════════════ */
-function showPage(name) {
+function toggleMobileNav() {
+  document.getElementById('topbar-nav-wrap')?.classList.toggle('mobile-open');
+}
+
+async function showPage(name) {
+  if (name === 'scenarios') {
+    try {
+      const p = await api('GET', '/api/profile');
+      if (!p || !p.income) {
+        toast('Set your monthly income on My Profile first.');
+        name = 'profile';
+      }
+    } catch (e) {
+      name = 'profile';
+    }
+  }
   document.querySelectorAll('.page-view').forEach(p => p.classList.remove('on'));
   document.querySelectorAll('.tnav').forEach(n => n.classList.remove('on'));
   document.getElementById('page-' + name)?.classList.add('on');
   document.getElementById('nav-' + name)?.classList.add('on');
+  document.getElementById('topbar-nav-wrap')?.classList.remove('mobile-open');
   if (name === 'simulate')  renderSimulateScenarios();
   if (name === 'scenarios') renderSavedScenarios();
   if (name === 'history')   loadHistory();
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
 }
 
-/* ══════════════════════════════════════════════
-   PROFILE
-══════════════════════════════════════════════ */
 async function loadProfile() {
   const p = await api('GET', '/api/profile');
   setv('p-income', p.income || '');
   setv('p-other-income', p.other_income || '');
   setv('p-savings', p.savings || '');
   setv('p-min-balance', p.min_balance || '');
-  setv('p-safety-target', p.safety_target || 3);
+  setv('p-safety-target', p.safety_target || 6);
   setv('p-rent', p.rent || '');
   setv('p-utilities', p.utilities || '');
   setv('p-insurance', p.insurance || '');
@@ -688,7 +670,6 @@ async function loadProfile() {
   setv('p-shopping', p.shopping || '');
   setv('p-misc', p.misc || '');
   document.getElementById('p-horizon').value = p.horizon_months || 12;
-  // EMIs
   document.getElementById('emi-list').innerHTML = '';
   emiCount = 0;
   (p.emis || []).forEach(e => addEMIRow(e.name, e.amount));
@@ -706,7 +687,7 @@ function readProfile() {
   return {
     income: gv('p-income'), other_income: gv('p-other-income'),
     savings: gv('p-savings'), min_balance: gv('p-min-balance') || 10000,
-    safety_target: gv('p-safety-target') || 3,
+    safety_target: gv('p-safety-target') || 6,
     rent: gv('p-rent'), utilities: gv('p-utilities'),
     insurance: gv('p-insurance'), subscriptions: gv('p-subscriptions'),
     food: gv('p-food'), transport: gv('p-transport'),
@@ -718,12 +699,19 @@ function readProfile() {
 async function saveProfile(thenSimulate = false) {
   const p = readProfile();
   if (!p.income) return toast('Please enter your income first.');
-  showSpinner('Saving profile…');
+  showSpinner(thenSimulate ? 'Saving and running baseline…' : 'Saving profile…');
   try {
     await api('PUT', '/api/profile', p);
     toast('Profile saved ✓');
-    if (thenSimulate) { hideSpinner(); showPage('simulate'); return; }
-  } catch(e) { toast('Error: ' + e.message); }
+    if (thenSimulate) {
+      const result = await api('POST', '/api/simulate', { scenario_ids: [] });
+      lastResult = result;
+      try { sessionStorage.setItem('mm_last_sim', JSON.stringify(result)); } catch (e) {}
+      renderDashboard(result);
+      await showPage('dashboard');
+      toast('Baseline simulation ready ✓');
+    }
+  } catch (e) { toast('Error: ' + e.message); }
   finally { hideSpinner(); }
 }
 
@@ -740,9 +728,17 @@ function addEMIRow(name = '', amount = '') {
   document.getElementById('emi-list').appendChild(div);
 }
 
-/* ══════════════════════════════════════════════
-   SCENARIOS
-══════════════════════════════════════════════ */
+async function quickAddTemplate(templateId) {
+  try {
+    const templates = await api('GET', '/api/scenarios/templates');
+    const t = templates.find(x => x.id === templateId);
+    if (!t) return toast('Template not found.');
+    await api('POST', '/api/scenarios', { name: t.name, scenario_type: t.id, params: t.default_params || {} });
+    toast('Scenario added — check the list below ✓');
+    await loadScenarios();
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
 async function loadScenarios() {
   savedScenarios = await api('GET', '/api/scenarios');
   renderSavedScenarios();
@@ -755,7 +751,7 @@ function renderSavedScenarios() {
     el.innerHTML = `<div class="empty"><div class="empty-icon">💡</div><div class="empty-text">No saved scenarios yet.<br/>Create your first what-if scenario to start testing.</div></div>`;
     return;
   }
-  const ICONS = {'salary-cut':'📉','job-loss':'💼','new-emi':'🏍️','rent-hike':'🏠','lifestyle-up':'✨','medical':'🏥'};
+  const ICONS = {'salary-cut':'📉','job-loss':'💼','new-emi':'🏍️','rent-hike':'🏠','lifestyle-up':'✨'};
   el.innerHTML = savedScenarios.map(s => `
     <div class="saved-item mb8">
       <div class="si-icon">${ICONS[s.scenario_type]||'📊'}</div>
@@ -773,10 +769,10 @@ function renderSimulateScenarios() {
   const el = document.getElementById('sim-scenarios-list');
   if (!el) return;
   if (!savedScenarios.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">💡</div><div class="empty-text">No scenarios yet. <a href="#" onclick="showPage('scenarios')" style="color:var(--violet)">Create some scenarios</a> first.</div></div>`;
+    el.innerHTML = `<div class="empty"><div class="empty-icon">💡</div><div class="empty-text">No saved scenarios yet.<br/>You can still run a <strong>baseline-only</strong> simulation with the button below, or <a href="#" onclick="showPage('scenarios');return false;" style="color:var(--violet)">add scenarios</a> to compare what-ifs.</div></div>`;
     return;
   }
-  const ICONS = {'salary-cut':'📉','job-loss':'💼','new-emi':'🏍️','rent-hike':'🏠','lifestyle-up':'✨','medical':'🏥'};
+  const ICONS = {'salary-cut':'📉','job-loss':'💼','new-emi':'🏍️','rent-hike':'🏠','lifestyle-up':'✨'};
   el.innerHTML = savedScenarios.map(s => `
     <div class="scard" id="sim-scard-${s.id}" onclick="toggleSimScenario(${s.id})">
       <div class="scard-icon">${ICONS[s.scenario_type]||'📊'}</div>
@@ -871,16 +867,15 @@ function renderScenarioParams(type, defaults = {}) {
       { id:'start', label:'Starts from month',  min:1,  max:12,   step:1,   unit:'',    def: d.start||1 }
     ],
     'rent-hike': [
-      { id:'pct',   label:'Rent increase',      min:5,  max:100,  step:5,   unit:'%',   def: d.pct||10 },
-      { id:'start', label:'Starts from month',  min:1,  max:12,   step:1,   unit:'',    def: d.start||1 }
+      { id:'amount', label:'Extra rent (₹/month)', min:0, max:25000, step:500, unit:'₹',
+        def: (d.amount != null && Number(d.amount) > 0) ? Number(d.amount) : ((d.pct != null && Number(d.pct) > 0) ? 0 : 2000), currency:true },
+      { id:'pct', label:'Or % of current rent (if ₹ is 0)', min:0, max:50, step:5, unit:'%',
+        def: (d.amount != null && Number(d.amount) > 0) ? 0 : (d.pct != null ? Number(d.pct) : 0) },
+      { id:'start', label:'Starts from month', min:1, max:24, step:1, unit:'', def: d.start||1 }
     ],
     'lifestyle-up': [
       { id:'pct',   label:'Variable expense increase', min:5, max:100, step:5, unit:'%', def: d.pct||20 },
       { id:'start', label:'Starts from month',  min:1,  max:12,   step:1,   unit:'',    def: d.start||1 }
-    ],
-    'medical': [
-      { id:'amount',label:'One-time expense',   min:5000,max:500000,step:5000,unit:'₹', def: d.amount||50000, currency:true },
-      { id:'month', label:'Hits in month',      min:1,  max:18,   step:1,   unit:'',    def: d.month||1 }
     ]
   };
   const rows = sliders[type] || [];
@@ -902,56 +897,77 @@ function updateRV(id, unit, currency) {
 }
 function readScenarioParams(type) {
   const rv = id => { const el = document.getElementById('rs-' + id); return el ? parseFloat(el.value) : 0; };
+  if (type === 'rent-hike') {
+    const amt = rv('amount'), pct = rv('pct'), st = rv('start');
+    if (pct > 0 && amt < 1) return { pct, start: st };
+    return { amount: amt, start: st };
+  }
   const maps = {
     'salary-cut':   { cut: rv('cut'),    dur: rv('dur'),   start: rv('start') },
     'job-loss':     { dur: rv('dur'),                      start: rv('start') },
     'new-emi':      { amount: rv('amount'), dur: rv('dur'), start: rv('start') },
-    'rent-hike':    { pct: rv('pct'),                      start: rv('start') },
-    'lifestyle-up': { pct: rv('pct'),                      start: rv('start') },
-    'medical':      { amount: rv('amount'),                month: rv('month') }
+    'lifestyle-up': { pct: rv('pct'),                      start: rv('start') }
   };
   return maps[type] || {};
 }
 
 function formatScenarioType(t) {
-  return {'salary-cut':'Salary Cut','job-loss':'Job Loss','new-emi':'New EMI','rent-hike':'Rent Hike','lifestyle-up':'Lifestyle Upgrade','medical':'Medical Emergency'}[t] || t;
+  return {'salary-cut':'Salary Cut','job-loss':'Job Loss','new-emi':'New EMI','rent-hike':'Rent Hike','lifestyle-up':'Lifestyle Upgrade'}[t] || t;
 }
 function formatParams(type, p) {
   if (!p) return '';
   if (type === 'salary-cut')   return `${p.cut}% cut for ${p.dur} months`;
   if (type === 'job-loss')     return `${p.dur} months no income`;
   if (type === 'new-emi')      return `₹${Number(p.amount).toLocaleString('en-IN')}/mo for ${p.dur} months`;
-  if (type === 'rent-hike')    return `+${p.pct}% rent from month ${p.start}`;
+  if (type === 'rent-hike') {
+    if (p.amount != null && Number(p.amount) > 0) return `+₹${Number(p.amount).toLocaleString('en-IN')}/mo from month ${p.start}`;
+    return `+${p.pct}% rent from month ${p.start}`;
+  }
   if (type === 'lifestyle-up') return `+${p.pct}% variable spend`;
-  if (type === 'medical')      return `₹${Number(p.amount).toLocaleString('en-IN')} in month ${p.month}`;
   return '';
 }
 
-/* ══════════════════════════════════════════════
-   SIMULATION
-══════════════════════════════════════════════ */
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s == null ? '' : String(s);
+  return d.innerHTML;
+}
+function formatExplText(t) {
+  if (!t) return '';
+  const esc = escapeHtml(t);
+  return esc.replace(/(₹[\d,]+)/g, '<strong>$1</strong>').replace(/(\d+\+?\s*mo(?:nths?)?)/gi, '<strong>$1</strong>');
+}
+function selectDashExpl(key) {
+  const o = window.__mmDashExpl || {};
+  const text = key === 'baseline' ? o.baseline : o[String(key)];
+  const el = document.getElementById('dash-expl-text');
+  if (el) el.innerHTML = formatExplText(text || '');
+  document.querySelectorAll('#dash-expl-chips [data-expl]').forEach(btn => {
+    const sel = (key === 'baseline' && btn.dataset.expl === 'baseline') || (String(key) === String(btn.dataset.expl));
+    btn.classList.toggle('btn-primary', sel);
+    btn.classList.toggle('btn-ghost', !sel);
+  });
+}
+
 async function runSimulation() {
   const scenarioIds = [...selectedSimScenarios];
-  const runMC = document.getElementById('opt-mc')?.checked || false;
   showSpinner('Running your financial simulation…');
   try {
-    const result = await api('POST', '/api/simulate', { scenario_ids: scenarioIds, run_monte_carlo: runMC, mc_runs: 500 });
+    const result = await api('POST', '/api/simulate', { scenario_ids: scenarioIds });
     lastResult = result;
+    try { sessionStorage.setItem('mm_last_sim', JSON.stringify(result)); } catch (e) {}
     renderDashboard(result);
-    showPage('dashboard');
+    await showPage('dashboard');
     toast('Simulation complete ✓');
   } catch(e) {
     toast('Error: ' + e.message);
-    if (e.message.includes('profile')) showPage('profile');
+    if (e.message.includes('profile')) await showPage('profile');
   } finally { hideSpinner(); }
 }
 
-/* ══════════════════════════════════════════════
-   RENDER DASHBOARD
-══════════════════════════════════════════════ */
 const C = {
   baseline: '#1fd89e', 'salary-cut': '#f0c040', 'job-loss': '#f05858',
-  'new-emi': '#5b9cf6', 'rent-hike': '#f0a060', 'lifestyle-up': '#c084fc', 'medical': '#f472b6'
+  'new-emi': '#5b9cf6', 'rent-hike': '#f0a060', 'lifestyle-up': '#c084fc'
 };
 
 function renderDashboard(r) {
@@ -962,12 +978,12 @@ function renderDashboard(r) {
   const fmt = n => '₹' + Math.abs(Math.round(n)).toLocaleString('en-IN');
   const pct = n => (n * 100).toFixed(1) + '%';
   const horizon = r.labels.length - 1;
+  const target = bm.safety_target || 6;
 
   const riskColors = { comfortable: 'var(--green)', caution: 'var(--yellow)', high: 'var(--red)' };
   const riskTags   = { comfortable: 'tag-green', caution: 'tag-yellow', high: 'tag-red' };
   const riskLabel  = { comfortable: '✅ Comfortable', caution: '⚠️ Caution', high: '🔴 High Risk' };
 
-  // ── Metric cards ──
   const runwayPct = Math.min(100, (bm.runway / horizon) * 100);
   const runwayC = bm.runway >= horizon ? 'var(--green)' : bm.runway >= 4 ? 'var(--yellow)' : 'var(--red)';
   const runwayPfill = bm.runway >= 4 ? 'pf-g' : bm.runway >= 2 ? 'pf-y' : 'pf-r';
@@ -995,13 +1011,26 @@ function renderDashboard(r) {
     <div class="mcard" style="--mc-accent:${bm.emergency_fund_ratio >= 3 ? 'var(--green)' : bm.emergency_fund_ratio >= 1 ? 'var(--yellow)' : 'var(--red)'}">
       <div class="mc-lbl">Emergency Fund</div>
       <div class="mc-val" style="color:${bm.emergency_fund_ratio >= 3 ? 'var(--green)' : bm.emergency_fund_ratio >= 1 ? 'var(--yellow)' : 'var(--red)'}">${bm.emergency_fund_ratio.toFixed(1)}×</div>
-      <div class="mc-sub">Months of expenses in savings${bm.emergency_fund_ratio < 3 ? ' — aim for 3×' : ' ✓'}</div>
-      <div class="prog mt8"><div class="prog-fill ${efPfill}" style="width:${Math.min(100,bm.emergency_fund_ratio/3*100)}%"></div></div>
+      <div class="mc-sub">Months of expenses in savings vs target</div>
+      <div class="prog mt8"><div class="prog-fill ${efPfill}" style="width:${Math.min(100,bm.emergency_fund_ratio/Math.max(target,0.1)*100)}%"></div></div>
     </div>
   </div>`;
 
-  // ── Safety Target Bar ──
-  const target = bm.safety_target || 3;
+  const baselineExpl = (r.baseline && r.baseline.explanation) ? r.baseline.explanation : '';
+  const explMap = { baseline: baselineExpl };
+  (r.scenarios || []).forEach(s => { explMap[String(s.id)] = s.explanation || ''; });
+  window.__mmDashExpl = explMap;
+  html += `<div class="insight mb16" id="dash-explanation-wrap">
+    <div class="insight-label">Scenario insight</div>
+    <div class="flex fgap8 mb12" style="flex-wrap:wrap" id="dash-expl-chips">` +
+    `<button type="button" class="btn btn-sm btn-primary" data-expl="baseline" onclick="selectDashExpl('baseline')">Baseline</button>` +
+    (r.scenarios || []).map(s =>
+      `<button type="button" class="btn btn-sm btn-ghost" data-expl="${s.id}" onclick="selectDashExpl(${s.id})">${escapeHtml(s.name)}</button>`
+    ).join('') +
+    `</div>
+    <div class="insight-text" id="dash-expl-text">${formatExplText(baselineExpl)}</div>
+  </div>`;
+
   const current = bm.emergency_fund_ratio;
   const gap = bm.safety_gap_amount;
   const targetPct = Math.min(100, (target / Math.max(target * 1.2, current * 1.1)) * 100);
@@ -1009,7 +1038,7 @@ function renderDashboard(r) {
   const gapColor = gap > 0 ? 'var(--yellow)' : 'var(--green)';
   html += `<div class="target-bar-wrap mb16">
     <div class="tb-row">
-      <div class="tb-title">🎯 Safety Target: ${target} months of expenses</div>
+      <div class="tb-title">Safety Target: ${target} months of expenses</div>
       <div class="tb-gap" style="color:${gapColor}">${gap > 0 ? `Short by ${fmt(gap)}` : '✓ Target met!'}</div>
     </div>
     <div class="tb-bar">
@@ -1019,36 +1048,19 @@ function renderDashboard(r) {
     <div class="tb-labels"><span>0</span><span>You are here: ${current.toFixed(1)} months</span><span>Target: ${target} months</span></div>
   </div>`;
 
-  // ── Insights ──
   html += `<div class="insight mb16">
-    <div class="insight-label">🧠 Your personalised insights</div>
+    <div class="insight-label">Your personalised insights</div>
     <div class="insight-text">${(r.insights || []).map((l,i) => (i?'<br/><br/>':'') + l.replace(/(₹[\d,]+)/g,'<strong>$1</strong>').replace(/(\d+ months?)/g,'<strong>$1</strong>')).join('')}</div>
   </div>`;
 
-  // ── Balance Chart ──
   const legend = `<div class="cl-item"><div class="cl-dot" style="background:${C.baseline}"></div>Baseline</div>` +
     (r.scenarios || []).map(s => `<div class="cl-item"><div class="cl-dot" style="background:${C[s.scenario_type]||'#888'}"></div>${s.name}</div>`).join('');
 
   html += `<div class="chart-card mb16">
-    <div class="chart-header"><div class="chart-title">Monthly Balance Forecast</div><div class="chart-legend">${legend}</div></div>
+    <div class="chart-header"><div class="chart-title">Balance over time</div><div class="chart-legend">${legend}</div></div>
     <div class="chart-wrap"><canvas id="c-balance"></canvas></div>
   </div>`;
 
-  html += `<div class="grid2 mb16">
-    <div class="chart-card">
-      <div class="chart-header"><div class="chart-title">Monthly Savings / Deficit</div></div>
-      <div class="chart-wrap" style="height:180px"><canvas id="c-cashflow"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-header"><div class="chart-title">Expense Breakdown</div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center">
-        <div class="chart-wrap" style="height:160px"><canvas id="c-pie"></canvas></div>
-        <div id="pie-legend"></div>
-      </div>
-    </div>
-  </div>`;
-
-  // ── Scenario Comparison ──
   if (r.scenarios && r.scenarios.length) {
     html += `<div class="card mb16">
       <div class="card-title">Scenario Comparison</div>
@@ -1057,7 +1069,7 @@ function renderDashboard(r) {
         <thead><tr><th>Plan</th><th>Safety Runway</th><th>Risk</th><th>DTI</th><th>First Risk Month</th><th>Monthly Cashflow</th></tr></thead>
         <tbody>
           <tr style="background:var(--gd)">
-            <td class="col-name">✅ Baseline (current plan) <span class="best-badge">SAFEST</span></td>
+            <td class="col-name">Baseline (current plan) <span class="best-badge">SAFEST</span></td>
             <td style="color:var(--green);font-weight:600">${bm.runway >= horizon ? horizon + '+ mo' : bm.runway + ' mo'}</td>
             <td><span class="tag ${riskTags[bm.risk_level]}">${riskLabel[bm.risk_level]}</span></td>
             <td style="color:${bm.dti>.5?'var(--red)':bm.dti>.35?'var(--yellow)':'var(--green)'}">${pct(bm.dti)}</td>
@@ -1081,22 +1093,6 @@ function renderDashboard(r) {
     html += `</tbody></table></div></div>`;
   }
 
-  // ── Monte Carlo ──
-  if (r.monte_carlo) {
-    const mc = r.monte_carlo;
-    html += `<div class="card mb16">
-      <div class="card-title">Monte Carlo Simulation Results <span class="tag tag-violet" style="margin-left:8px">${mc.runs} runs</span></div>
-      <div class="fs13 c2">We ran ${mc.runs} simulations with random variation in your income and expenses to estimate the range of possible safety runways.</div>
-      <div class="mc-row">
-        <div class="mc-stat"><div class="mc-stat-val" style="color:var(--red)">${mc.p10} mo</div><div class="mc-stat-lbl">Pessimistic (p10)</div></div>
-        <div class="mc-stat"><div class="mc-stat-val" style="color:var(--yellow)">${mc.p50} mo</div><div class="mc-stat-lbl">Median (p50)</div></div>
-        <div class="mc-stat"><div class="mc-stat-val" style="color:var(--green)">${mc.p90} mo</div><div class="mc-stat-lbl">Optimistic (p90)</div></div>
-        <div class="mc-stat"><div class="mc-stat-val" style="color:var(--violet)">${mc.prob_safe}%</div><div class="mc-stat-lbl">Probability of staying safe</div></div>
-      </div>
-    </div>`;
-  }
-
-  // ── Advice ──
   if (r.advice && r.advice.length) {
     html += `<div class="card-title mt16 mb12">💡 Personalised Advice</div><div class="advice-grid mb24">`;
     r.advice.forEach(a => {
@@ -1119,7 +1115,6 @@ function drawCharts(r) {
   const b = r.baseline;
   const horizon = r.labels.length - 1;
 
-  // Balance line chart
   const bCtx = document.getElementById('c-balance');
   if (bCtx) {
     const datasets = [{
@@ -1156,49 +1151,6 @@ function drawCharts(r) {
       }
     });
   }
-
-  // Cashflow bar
-  const cfCtx = document.getElementById('c-cashflow');
-  if (cfCtx) {
-    const monthlyCF = b.balances.slice(1).map((v, i) => v - b.balances[i]);
-    charts.cashflow = new Chart(cfCtx, {
-      type: 'bar', data: {
-        labels: r.labels.slice(1),
-        datasets: [{ data: monthlyCF, backgroundColor: monthlyCF.map(v => v >= 0 ? 'rgba(31,216,158,.55)' : 'rgba(240,88,88,.55)'), borderRadius: 3 }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1d2133', borderColor: 'rgba(255,255,255,.08)', borderWidth: 1, titleColor: '#eef0f8', bodyColor: '#7a84a0', callbacks: { label: ctx => `  ₹${Math.round(ctx.raw).toLocaleString('en-IN')}` } } },
-        scales: {
-          x: { grid: { display: false }, ticks: { color: '#454d66', font: { size: 9 } } },
-          y: { grid: { color: 'rgba(255,255,255,.03)' }, ticks: { color: '#454d66', font: { size: 9 }, callback: v => '₹' + (v/1000).toFixed(0) + 'k' } }
-        }
-      }
-    });
-  }
-
-  // Pie
-  const pieCtx = document.getElementById('c-pie');
-  const pieColors = ['#8b7cf8','#1fd89e','#f05858','#5b9cf6','#f0c040','#f472b6','#c084fc','#f0a060'];
-  if (pieCtx && r.expense_breakdown) {
-    const items = Object.entries(r.expense_breakdown).filter(([,v]) => v > 0);
-    charts.pie = new Chart(pieCtx, {
-      type: 'doughnut',
-      data: { labels: items.map(([k]) => k), datasets: [{ data: items.map(([,v]) => v), backgroundColor: pieColors, borderWidth: 0, hoverOffset: 4 }] },
-      options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1d2133', borderColor: 'rgba(255,255,255,.08)', borderWidth: 1, titleColor: '#eef0f8', bodyColor: '#7a84a0', callbacks: { label: ctx => `  ₹${Math.round(ctx.raw).toLocaleString('en-IN')}` } } } }
-    });
-    // Legend
-    const legendEl = document.getElementById('pie-legend');
-    if (legendEl) {
-      const total = items.reduce((s,[,v]) => s+v, 0);
-      legendEl.innerHTML = items.map(([k,v],i) => `
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
-          <div style="width:8px;height:8px;border-radius:50%;background:${pieColors[i]};flex-shrink:0"></div>
-          <span style="font-size:.65rem;color:var(--text2);flex:1">${k}</span>
-          <span style="font-size:.65rem;font-weight:600;color:var(--text)">${((v/total)*100).toFixed(0)}%</span>
-        </div>`).join('');
-    }
-  }
 }
 
 function destroyCharts() {
@@ -1206,9 +1158,6 @@ function destroyCharts() {
   charts = {};
 }
 
-/* ══════════════════════════════════════════════
-   HISTORY
-══════════════════════════════════════════════ */
 async function loadHistory() {
   try {
     const runs = await api('GET', '/api/simulations');
@@ -1218,20 +1167,25 @@ async function loadHistory() {
       el.innerHTML = `<div class="empty"><div class="empty-icon">📜</div><div class="empty-text">No simulation history yet.<br/>Run your first simulation to see results here.</div></div>`;
       return;
     }
-    el.innerHTML = runs.map(r => `
+    const riskLabel = { comfortable: 'Comfortable', caution: 'Caution', high: 'High risk' };
+    el.innerHTML = runs.map(r => {
+      const names = (r.scenario_names && r.scenario_names.length) ? r.scenario_names.join(', ') : 'Baseline only';
+      const br = r.baseline_risk ? (riskLabel[r.baseline_risk] || r.baseline_risk) : '—';
+      return `
       <div class="hist-item" onclick="loadHistoryRun(${r.id})">
         <div style="font-size:1.2rem">🔮</div>
-        <div>
+        <div style="flex:1;min-width:0">
           <div class="hi-date">${(() => {
-            // SQLite stores UTC without 'Z' — add it so browser converts to local time
             const raw = r.created_at.includes('T') ? r.created_at : r.created_at.replace(' ', 'T');
             const d   = new Date(raw.endsWith('Z') ? raw : raw + 'Z');
             return d.toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short'});
           })()}</div>
-          <div class="hi-title">Simulation with ${r.scenario_ids?.length || 0} scenario${r.scenario_ids?.length !== 1 ? 's' : ''}</div>
+          <div class="hi-title">${names}</div>
+          <div class="hi-badges"><span class="tag tag-${r.baseline_risk === 'high' ? 'red' : r.baseline_risk === 'caution' ? 'yellow' : 'green'}">Baseline: ${br}</span></div>
         </div>
-        <div style="margin-left:auto;color:var(--text3);font-size:.7rem">View →</div>
-      </div>`).join('');
+        <div style="margin-left:auto;color:var(--text3);font-size:.7rem;flex-shrink:0">View →</div>
+      </div>`;
+    }).join('');
   } catch(e) {}
 }
 async function loadHistoryRun(id) {
@@ -1239,20 +1193,17 @@ async function loadHistoryRun(id) {
   try {
     const result = await api('GET', `/api/simulations/${id}`);
     lastResult = result;
+    try { sessionStorage.setItem('mm_last_sim', JSON.stringify(result)); } catch (e) {}
     renderDashboard(result);
-    showPage('dashboard');
+    await showPage('dashboard');
   } catch(e) { toast('Error: ' + e.message); }
   finally { hideSpinner(); }
 }
 
-/* ══════════════════════════════════════════════
-   HELPERS
-══════════════════════════════════════════════ */
 function show(id) {
   const el = document.getElementById(id);
   if (!el) return;
   el.classList.remove('hidden');
-  // landing page needs flex, not block
   if (id === 'page-landing') el.style.display = 'flex';
 }
 function hide(id) {
