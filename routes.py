@@ -4,7 +4,7 @@ from __future__ import annotations
 import re
 from datetime import datetime, timedelta
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
@@ -14,13 +14,14 @@ from database import FinancialProfile, Scenario, SimulationRun, User
 from deps import get_current_user, get_db
 from schemas import ProfileIn, RegisterRequest, ScenarioIn, SimulateRequest, TokenResponse
 from simulation import (
+    SCENARIO_TYPES,
     build_profile_dict,
+    calc_metrics,
     generate_advice,
     generate_baseline_explanation,
     generate_insights,
     generate_scenario_explanation,
     simulate_timeline,
-    calc_metrics,
 )
 
 router = APIRouter()
@@ -41,7 +42,7 @@ def _scenario_to_dict(s: Scenario) -> dict:
 def _merge_profile_in(data: ProfileIn) -> dict:
     """Apply opinionated defaults when client sends 0 / omitted."""
     s = get_settings()
-    raw = data.model_dump() if hasattr(data, "model_dump") else data.dict()
+    raw = data.model_dump()
     if not raw.get("horizon_months"):
         raw["horizon_months"] = s.default_horizon_months
     if not raw.get("safety_target"):
@@ -49,6 +50,69 @@ def _merge_profile_in(data: ProfileIn) -> dict:
     if not raw.get("min_balance"):
         raw["min_balance"] = s.default_min_balance
     return raw
+
+
+def _validate_scenario(data: ScenarioIn) -> None:
+    if not data.name.strip():
+        raise HTTPException(400, "Scenario name cannot be empty.")
+    if data.scenario_type not in SCENARIO_TYPES:
+        raise HTTPException(400, f"Unknown scenario type. Allowed: {', '.join(sorted(SCENARIO_TYPES))}.")
+
+
+def _month_labels(months: int) -> list[str]:
+    today = datetime.utcnow()
+    return ["Now"] + [
+        (today.replace(day=1) + timedelta(days=32 * i)).strftime("%b '%y") for i in range(1, months + 1)
+    ]
+
+
+def run_simulation_for_profile(p: FinancialProfile, scenario_rows: list[Scenario]) -> dict:
+    """Build full simulation payload from a profile and scenario ORM rows."""
+    prof = build_profile_dict(p)
+    months = p.horizon_months
+    base_balances = simulate_timeline(prof, None, months)
+    base_metrics = calc_metrics(prof, base_balances)
+
+    scenario_results = []
+    for s in scenario_rows:
+        bals = simulate_timeline(prof, {"scenario_type": s.scenario_type, "params": s.params or {}}, months)
+        mets = calc_metrics(prof, bals)
+        scenario_results.append(
+            {
+                "id": s.id,
+                "name": s.name,
+                "scenario_type": s.scenario_type,
+                "params": s.params,
+                "balances": [round(b) for b in bals],
+                "metrics": mets,
+                "explanation": generate_scenario_explanation(
+                    prof, s.scenario_type, s.params or {}, mets, base_metrics
+                ),
+            }
+        )
+
+    best = worst = None
+    if scenario_results:
+        best = max(scenario_results, key=lambda r: r["metrics"]["runway"])
+        worst = min(scenario_results, key=lambda r: r["metrics"]["runway"])
+
+    return {
+        "labels": _month_labels(months),
+        "profile": {
+            k: round(v, 2) if isinstance(v, float) else v for k, v in prof.items() if k != "expense_breakdown"
+        },
+        "expense_breakdown": prof["expense_breakdown"],
+        "baseline": {
+            "balances": [round(b) for b in base_balances],
+            "metrics": base_metrics,
+            "explanation": generate_baseline_explanation(prof, base_metrics),
+        },
+        "scenarios": scenario_results,
+        "best_scenario_id": best["id"] if best else None,
+        "worst_scenario_id": worst["id"] if worst else None,
+        "insights": generate_insights(prof, base_metrics, scenario_results),
+        "advice": generate_advice(prof, base_metrics),
+    }
 
 
 # ── AUTH ──────────────────────────────────
@@ -124,7 +188,8 @@ def list_scenarios(user: User = Depends(get_current_user), db: Session = Depends
 
 @router.post("/scenarios")
 def create_scenario(data: ScenarioIn, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    s = Scenario(user_id=user.id, name=data.name, scenario_type=data.scenario_type, params=data.params)
+    _validate_scenario(data)
+    s = Scenario(user_id=user.id, name=data.name.strip(), scenario_type=data.scenario_type, params=data.params)
     db.add(s)
     db.commit()
     db.refresh(s)
@@ -133,10 +198,11 @@ def create_scenario(data: ScenarioIn, user: User = Depends(get_current_user), db
 
 @router.put("/scenarios/{sid}")
 def update_scenario(sid: int, data: ScenarioIn, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    _validate_scenario(data)
     s = db.query(Scenario).filter(Scenario.id == sid, Scenario.user_id == user.id).first()
     if not s:
         raise HTTPException(404, "Scenario not found")
-    s.name = data.name
+    s.name = data.name.strip()
     s.scenario_type = data.scenario_type
     s.params = data.params
     db.commit()
@@ -192,6 +258,13 @@ def scenario_templates():
             "desc": "Higher variable spending",
             "default_params": {"pct": 15, "start": 1},
         },
+        {
+            "id": "medical",
+            "name": "Medical emergency (₹50k)",
+            "icon": "🏥",
+            "desc": "One-time hospital bill",
+            "default_params": {"amount": 50000, "month": 3},
+        },
     ]
 
 
@@ -204,62 +277,20 @@ def simulate(req: SimulateRequest, user: User = Depends(get_current_user), db: S
     if not p.income:
         raise HTTPException(400, "Please set your income in your profile first.")
 
-    prof = build_profile_dict(p)
-    months = p.horizon_months
-
-    base_balances = simulate_timeline(prof, None, months)
-    base_metrics = calc_metrics(prof, base_balances)
-
-    today = datetime.utcnow()
-    labels = ["Now"] + [
-        (today.replace(day=1) + timedelta(days=32 * i)).strftime("%b '%y") for i in range(1, months + 1)
-    ]
-
-    scenario_results = []
-    for sid in req.scenario_ids:
-        s = db.query(Scenario).filter(Scenario.id == sid, Scenario.user_id == user.id).first()
+    scenario_ids = list(dict.fromkeys(req.scenario_ids))
+    scenario_rows: list[Scenario] = []
+    missing: list[int] = []
+    for sid in scenario_ids:
+        s = db.query(Scenario).filter(Scenario.id == sid, Scenario.user_id == user.id, Scenario.is_active == True).first()
         if not s:
-            continue
-        bals = simulate_timeline(prof, {"scenario_type": s.scenario_type, "params": s.params}, months)
-        mets = calc_metrics(prof, bals)
-        scenario_results.append(
-            {
-                "id": s.id,
-                "name": s.name,
-                "scenario_type": s.scenario_type,
-                "params": s.params,
-                "balances": [round(b) for b in bals],
-                "metrics": mets,
-                "explanation": generate_scenario_explanation(prof, s.scenario_type, s.params or {}, mets, base_metrics),
-            }
-        )
+            missing.append(sid)
+        else:
+            scenario_rows.append(s)
+    if missing:
+        raise HTTPException(404, f"Scenario(s) not found or inactive: {missing}")
 
-    insights = generate_insights(prof, base_metrics, scenario_results)
-    advice = generate_advice(prof, base_metrics)
-    baseline_explanation = generate_baseline_explanation(prof, base_metrics)
-
-    best = worst = None
-    if scenario_results:
-        best = max(scenario_results, key=lambda r: r["metrics"]["runway"])
-        worst = min(scenario_results, key=lambda r: r["metrics"]["runway"])
-
-    result = {
-        "labels": labels,
-        "profile": {k: round(v, 2) if isinstance(v, float) else v for k, v in prof.items() if k != "expense_breakdown"},
-        "expense_breakdown": prof["expense_breakdown"],
-        "baseline": {
-            "balances": [round(b) for b in base_balances],
-            "metrics": base_metrics,
-            "explanation": baseline_explanation,
-        },
-        "scenarios": scenario_results,
-        "best_scenario_id": best["id"] if best else None,
-        "worst_scenario_id": worst["id"] if worst else None,
-        "insights": insights,
-        "advice": advice,
-    }
-
-    run = SimulationRun(user_id=user.id, profile_snapshot=prof, scenario_ids=req.scenario_ids, result=result)
+    result = run_simulation_for_profile(p, scenario_rows)
+    run = SimulationRun(user_id=user.id, profile_snapshot=build_profile_dict(p), scenario_ids=scenario_ids, result=result)
     db.add(run)
     db.commit()
 
@@ -267,21 +298,27 @@ def simulate(req: SimulateRequest, user: User = Depends(get_current_user), db: S
 
 
 @router.get("/simulations")
-def list_simulations(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    runs = (
-        db.query(SimulationRun)
-        .filter(SimulationRun.user_id == user.id)
-        .order_by(SimulationRun.created_at.desc())
-        .limit(3)
-        .all()
-    )
+def list_simulations(
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+    limit: int = Query(default=None, ge=1),
+    offset: int = Query(default=0, ge=0),
+):
+    cfg = get_settings()
+    page_size = limit if limit is not None else cfg.history_default_limit
+    page_size = min(page_size, cfg.history_max_limit)
+
+    q = db.query(SimulationRun).filter(SimulationRun.user_id == user.id)
+    total = q.count()
+    runs = q.order_by(SimulationRun.created_at.desc()).offset(offset).limit(page_size).all()
+
     out = []
     for r in runs:
         res = r.result or {}
         baseline_risk = (res.get("baseline") or {}).get("metrics", {}).get("risk_level")
         names = []
         for sid in r.scenario_ids or []:
-            sc = db.query(Scenario).filter(Scenario.id == sid).first()
+            sc = db.query(Scenario).filter(Scenario.id == sid, Scenario.user_id == user.id).first()
             if sc:
                 names.append(sc.name)
         out.append(
@@ -293,7 +330,7 @@ def list_simulations(user: User = Depends(get_current_user), db: Session = Depen
                 "baseline_risk": baseline_risk,
             }
         )
-    return out
+    return {"total": total, "limit": page_size, "offset": offset, "items": out}
 
 
 @router.get("/simulations/{run_id}")

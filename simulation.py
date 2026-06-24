@@ -7,6 +7,10 @@ from typing import Any
 
 from config import get_settings
 
+SCENARIO_TYPES = frozenset(
+    {"salary-cut", "job-loss", "new-emi", "rent-hike", "lifestyle-up", "medical"}
+)
+
 
 def build_profile_dict(p: Any) -> dict:
     """Build internal profile dict from SQLAlchemy FinancialProfile or compatible object."""
@@ -165,6 +169,7 @@ def generate_insights(profile: dict, base_metrics: dict, scenario_results: list)
         "new-emi": "Adding this EMI",
         "rent-hike": "A rent hike",
         "lifestyle-up": "A lifestyle upgrade",
+        "medical": "A medical emergency",
     }
     base_rw = m["runway"]
     for sr in scenario_results:
@@ -240,6 +245,10 @@ def generate_scenario_explanation(
             lines.append(f"A {params.get('pct', 0):.0f}% rent increase raises fixed outgo each month.")
     elif st == "lifestyle-up":
         lines.append(f"Higher variable spending ({params.get('pct', 0):.0f}%) compounds over the horizon.")
+    elif st == "medical":
+        lines.append(
+            f"A one-time medical expense of ₹{int(params.get('amount', 0)):,} in month {int(params.get('month', 1))} hits savings directly."
+        )
     risk = scen_metrics["risk_level"]
     lines.append(f"Risk vs this scenario: {'High risk' if risk == 'high' else 'Caution' if risk == 'caution' else 'Comfortable'}.")
     return " ".join(lines)
