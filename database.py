@@ -30,6 +30,7 @@ class User(Base):
     profiles = relationship("FinancialProfile", back_populates="user", cascade="all, delete")
     scenarios = relationship("Scenario", back_populates="user", cascade="all, delete")
     simulations = relationship("SimulationRun", back_populates="user", cascade="all, delete")
+    goals = relationship("Goal", back_populates="user", cascade="all, delete")
 
 
 class FinancialProfile(Base):
@@ -66,6 +67,19 @@ class Scenario(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     user = relationship("User", back_populates="scenarios")
+
+
+class Goal(Base):
+    __tablename__ = "goals"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    name = Column(String, nullable=False)
+    target_amount = Column(Float, nullable=False)
+    target_months = Column(Integer, nullable=False)
+    category = Column(String, nullable=False, default="other")
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    user = relationship("User", back_populates="goals")
 
 
 class SimulationRun(Base):

@@ -12,7 +12,8 @@ try:
 except ImportError:
     pass
 
-from fastapi import FastAPI, Request
+import logging
+from fastapi import FastAPI, Request, Depends
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
@@ -20,6 +21,10 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from config import get_settings
 from routes import router as api_router
+from deps import get_db
+
+logger = logging.getLogger("money_mirror")
+logging.basicConfig(level=logging.INFO)
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -36,16 +41,20 @@ def create_app() -> FastAPI:
     app = FastAPI(title="Money Mirror API", version="2.1.0")
 
     @app.exception_handler(Exception)
-    async def generic_exception_handler(request, exc):
+    async def generic_exception_handler(request: Request, exc: Exception):
+        logger.error(
+            f"Unhandled exception during request {request.method} {request.url.path}: {str(exc)}",
+            exc_info=True,
+        )
         if not cfg.is_production:
-            import traceback
-
-            traceback.print_exc()
             return JSONResponse(status_code=500, content={"detail": str(exc)})
         return JSONResponse(status_code=500, content={"detail": "Internal server error"})
 
     @app.exception_handler(RequestValidationError)
-    async def validation_exception_handler(request, exc):
+    async def validation_exception_handler(request: Request, exc: RequestValidationError):
+        logger.warning(
+            f"Validation error during request {request.method} {request.url.path}: {exc.errors()}"
+        )
         return JSONResponse(status_code=422, content={"detail": exc.errors()})
 
     allow_credentials = "*" not in cfg.cors_origins
@@ -69,12 +78,20 @@ def create_app() -> FastAPI:
         return {"message": "Money Mirror API. Place money_mirror_app.html next to main.py."}
 
     @app.get("/health")
-    def health():
+    def health(db=Depends(get_db)):
+        try:
+            from sqlalchemy import text
+            db.execute(text("SELECT 1"))
+            db_status = "connected"
+        except Exception as e:
+            db_status = f"error: {str(e)}"
+            
         return {
-            "status": "ok",
+            "status": "ok" if "error" not in db_status else "degraded",
             "service": "Money Mirror API",
             "version": "2.1.0",
             "environment": cfg.environment,
+            "database": db_status,
         }
 
     return app

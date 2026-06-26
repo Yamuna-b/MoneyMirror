@@ -8,261 +8,378 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root {
-  --bg:      #0b0d14;
-  --s1:      #10131e;
-  --s2:      #161926;
-  --s3:      #1d2133;
-  --border:  rgba(255,255,255,0.06);
-  --border2: rgba(255,255,255,0.11);
-  --text:    #eef0f8;
-  --text2:   #7a84a0;
-  --text3:   #454d66;
-  --green:   #1fd89e;
-  --gd:      rgba(31,216,158,0.1);
-  --yellow:  #f0c040;
-  --yd:      rgba(240,192,64,0.1);
-  --red:     #f05858;
-  --rd:      rgba(240,88,88,0.1);
-  --blue:    #5b9cf6;
-  --bd:      rgba(91,156,246,0.1);
-  --violet:  #8b7cf8;
-  --vd:      rgba(139,124,248,0.12);
-  --radius:  14px;
-  --rsm:     9px;
-  --shadow:  0 2px 20px rgba(0,0,0,0.4);
-  --glow:    0 0 40px rgba(139,124,248,0.08);
+  --bg:      #08090f;
+  --s1:      #0e101a;
+  --s2:      #131624;
+  --s3:      #1b1e32;
+  --border:  rgba(255,255,255,0.05);
+  --border2: rgba(255,255,255,0.10);
+  --text:    #f1f3f9;
+  --text2:   #8a94b5;
+  --text3:   #4e5670;
+  --green:   #12e3a0;
+  --gd:      rgba(18,227,160,0.08);
+  --yellow:  #f3c63f;
+  --yd:      rgba(243,198,63,0.08);
+  --red:     #f85e5e;
+  --rd:      rgba(248,94,94,0.08);
+  --blue:    #4fa2ff;
+  --bd:      rgba(79,162,255,0.08);
+  --violet:  #8b5cf6;
+  --vd:      rgba(139,92,246,0.1);
+  --radius:  16px;
+  --rsm:     10px;
+  --shadow:  0 4px 30px rgba(0,0,0,0.5);
+  --glow:    0 0 50px rgba(139,92,246,0.05);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:15px}
 body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-height:100vh;overflow-x:hidden}
-::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#252a3d;border-radius:2px}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#23273b;border-radius:2px}
 
 .hidden{display:none!important}
-.flex{display:flex}.fac{align-items:center}.fjc{justify-content:center}.fgap8{gap:8px}.fgap12{gap:12px}.fgap16{gap:16px}
-.fw600{font-weight:600}.fs12{font-size:.75rem}.fs13{font-size:.8rem}.fs14{font-size:.85rem}
+.flex{display:flex}.fac{align-items:center}.fjc{justify-content:center}.fgap8{gap:8px}.fgap12{gap:12px}.fgap16{gap:16px}.fwrap{flex-wrap:wrap}
+.fw600{font-weight:600}.fs11{font-size:.7rem}.fs12{font-size:.75rem}.fs13{font-size:.8rem}.fs14{font-size:.85rem}
 .c2{color:var(--text2)}.c3{color:var(--text3)}
 .mt4{margin-top:4px}.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt24{margin-top:24px}.mt32{margin-top:32px}
-.mb8{margin-bottom:8px}.mb12{margin-bottom:12px}.mb16{margin-bottom:16px}.mb24{margin-bottom:24px}
-.green{color:var(--green)}.yellow{color:var(--yellow)}.red{color:var(--red)}.violet{color:var(--violet)}
+.mb4{margin-bottom:4px}.mb8{margin-bottom:8px}.mb12{margin-bottom:12px}.mb16{margin-bottom:16px}.mb24{margin-bottom:24px}
+.green{color:var(--green)}.yellow{color:var(--yellow)}.red{color:var(--red)}.violet{color:var(--violet)}.blue{color:var(--blue)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 
 #page-landing{
   min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:40px 24px;position:relative;overflow:hidden;
 }
-.land-glow{position:absolute;border-radius:50%;pointer-events:none;filter:blur(100px)}
-.lg1{width:700px;height:700px;background:rgba(139,124,248,.07);top:-150px;left:-150px}
-.lg2{width:500px;height:500px;background:rgba(31,216,158,.05);bottom:-80px;right:-80px}
-.land-badge{display:inline-flex;align-items:center;gap:8px;background:var(--vd);border:1px solid rgba(139,124,248,.25);padding:6px 16px;border-radius:50px;margin-bottom:28px;font-size:.72rem;color:#c2bbff;letter-spacing:.04em}
+.land-glow{position:absolute;border-radius:50%;pointer-events:none;filter:blur(120px)}
+.lg1{width:700px;height:700px;background:rgba(139,92,246,.08);top:-150px;left:-150px}
+.lg2{width:500px;height:500px;background:rgba(18,227,160,.06);bottom:-80px;right:-80px}
+.land-badge{display:inline-flex;align-items:center;gap:8px;background:var(--vd);border:1px solid rgba(139,92,246,.2);padding:6px 18px;border-radius:50px;margin-bottom:24px;font-size:.75rem;color:#d8cfff;letter-spacing:.04em}
 .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--violet);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
-.land-title{font-size:clamp(2.6rem,6vw,5rem);font-weight:800;line-height:1.06;margin-bottom:20px;letter-spacing:-.03em}
-.land-title .g{background:linear-gradient(125deg,#8b7cf8 0%,#1fd89e 55%,#5b9cf6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.land-sub{font-size:1rem;line-height:1.75;color:var(--text2);max-width:520px;margin:0 auto 40px;font-family:'Lora',serif;font-style:italic}
-.land-cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#8b7cf8,#5b9cf6);color:#fff;border:none;padding:15px 36px;border-radius:50px;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .3s;font-family:'Sora',sans-serif;box-shadow:0 8px 32px rgba(139,124,248,.35);letter-spacing:.01em}
-.land-cta:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(139,124,248,.45)}
-.land-chips{display:flex;gap:10px;margin-top:48px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1}
-.lchip{display:flex;align-items:center;gap:7px;background:var(--s1);border:1px solid var(--border);padding:9px 16px;border-radius:50px;font-size:.72rem;color:var(--text2)}
+.land-title{font-size:clamp(2.8rem,7vw,5.2rem);font-weight:800;line-height:1.04;margin-bottom:20px;letter-spacing:-.03em}
+.land-title .g{background:linear-gradient(125deg,#8b5cf6 0%,#12e3a0 50%,#4fa2ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.land-sub{font-size:1.1rem;line-height:1.7;color:var(--text2);max-width:550px;margin:0 auto 36px;font-family:'Lora',serif;font-style:italic}
+.land-cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#8b5cf6,#4fa2ff);color:#fff;border:none;padding:16px 40px;border-radius:50px;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .3s;font-family:'Sora',sans-serif;box-shadow:0 8px 30px rgba(139,92,246,.3);letter-spacing:.01em}
+.land-cta:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(139,92,246,.45)}
+.land-chips{display:flex;gap:12px;margin-top:54px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1}
+.lchip{display:flex;align-items:center;gap:7px;background:var(--s1);border:1px solid var(--border);padding:9px 18px;border-radius:50px;font-size:.75rem;color:var(--text2)}
 
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(6px)}
-.modal{background:var(--s1);border:1px solid var(--border2);border-radius:20px;padding:36px;width:100%;max-width:420px;position:relative}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(8px)}
+.modal{background:var(--s1);border:1px solid var(--border2);border-radius:20px;padding:36px;width:100%;max-width:420px;position:relative;box-shadow:var(--shadow)}
 .modal-title{font-size:1.4rem;font-weight:700;margin-bottom:4px}
 .modal-sub{font-size:.8rem;color:var(--text2);margin-bottom:28px}
 .modal-tabs{display:flex;gap:0;margin-bottom:28px;background:var(--s2);border-radius:50px;padding:4px}
 .mtab{flex:1;padding:9px;border-radius:50px;font-size:.78rem;font-weight:600;cursor:pointer;text-align:center;transition:all .2s;color:var(--text2)}
 .mtab.on{background:var(--s3);color:var(--text)}
-.form-row{margin-bottom:14px}
-.flabel{font-size:.68rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block}
+.form-row{margin-bottom:16px}
+.flabel{font-size:.68rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block}
 .finput{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px;color:var(--text);font-size:.88rem;font-family:'Sora',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s}
-.finput:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(139,124,248,.15)}
+.finput:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(139,92,246,.15)}
 .finput::placeholder{color:var(--text3)}
 .fhint{font-size:.64rem;color:var(--text3);margin-top:4px}
-.auth-btn{width:100%;background:linear-gradient(135deg,#8b7cf8,#5b9cf6);color:#fff;border:none;padding:13px;border-radius:50px;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .3s;font-family:'Sora',sans-serif;margin-top:6px}
-.auth-btn:hover{opacity:.9;transform:translateY(-1px)}
+.auth-btn{width:100%;background:linear-gradient(135deg,#8b5cf6,#4fa2ff);color:#fff;border:none;padding:13px;border-radius:50px;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .3s;font-family:'Sora',sans-serif;margin-top:6px}
+.auth-btn:hover{opacity:.95;transform:translateY(-1px)}
 .auth-error{
   font-size:.75rem;color:var(--red);margin-top:10px;text-align:center;
-  background:rgba(240,88,88,0.08);border:1px solid rgba(240,88,88,0.25);
+  background:rgba(248,94,94,0.08);border:1px solid rgba(248,94,94,0.20);
   padding:9px 14px;border-radius:8px;line-height:1.5;
 }
 
 #page-app{min-height:100vh;display:flex;flex-direction:column}
-.topbar{position:sticky;top:0;z-index:200;background:rgba(11,13,20,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.topbar-logo{font-size:1.05rem;font-weight:800;letter-spacing:-.02em}
+.topbar{position:sticky;top:0;z-index:200;background:rgba(8,9,15,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.topbar-logo{font-size:1.15rem;font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:6px;cursor:pointer}
 .topbar-logo span{color:var(--green)}
 .topbar-nav-wrap{display:flex;align-items:center;flex:1;justify-content:center}
 .nav-toggle{display:none;align-items:center;justify-content:center;width:40px;height:40px;background:var(--s2);border:1px solid var(--border);border-radius:10px;color:var(--text);cursor:pointer;font-size:1.1rem}
-.topbar-nav{display:flex;gap:2px;flex-wrap:wrap;justify-content:center}
-.tnav{padding:7px 14px;border-radius:8px;font-size:.72rem;font-weight:500;cursor:pointer;color:var(--text2);transition:all .2s;background:none;border:none;font-family:'Sora',sans-serif}
+.topbar-nav{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.tnav{padding:8px 16px;border-radius:8px;font-size:.75rem;font-weight:600;cursor:pointer;color:var(--text2);transition:all .2s;background:none;border:none;font-family:'Sora',sans-serif}
 .tnav:hover{color:var(--text);background:var(--s2)}
 .tnav.on{color:var(--text);background:var(--s2)}
-.topbar-right{display:flex;align-items:center;gap:12px}
-.user-chip{display:flex;align-items:center;gap:8px;background:var(--s2);border:1px solid var(--border);padding:6px 12px;border-radius:50px;font-size:.72rem;color:var(--text2)}
-.user-avatar{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--blue));display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:#fff}
-.logout-btn{font-size:.68rem;color:var(--text3);cursor:pointer;background:none;border:none;font-family:'Sora',sans-serif;transition:color .2s}
-.logout-btn:hover{color:var(--red)}
 
-.app-content{flex:1;max-width:1100px;margin:0 auto;width:100%;padding:28px 24px 80px}
+.topbar-right{display:flex;align-items:center;gap:12px;position:relative}
+.user-chip{display:flex;align-items:center;gap:8px;background:var(--s2);border:1px solid var(--border);padding:6px 14px;border-radius:50px;font-size:.72rem;color:var(--text);cursor:pointer;user-select:none;transition:border-color .2s}
+.user-chip:hover{border-color:var(--border2)}
+.user-avatar{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--blue));display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:#fff}
+.dropdown-icon{font-size:.6rem;color:var(--text2)}
 
+.profile-dropdown{
+  position:absolute;top:42px;right:0;width:160px;background:var(--s2);border:1px solid var(--border2);
+  border-radius:var(--rsm);padding:6px;box-shadow:var(--shadow);z-index:300;animation:fadeUp .2s ease;
+}
+.dropdown-item{
+  width:100%;text-align:left;padding:8px 12px;font-size:.75rem;color:var(--text2);background:none;border:none;
+  cursor:pointer;border-radius:6px;font-family:'Sora',sans-serif;transition:all .2s;
+}
+.dropdown-item:hover{color:var(--text);background:var(--s3)}
+.dropdown-item.danger:hover{color:var(--red);background:var(--rd)}
+
+.app-content{flex:1;max-width:1150px;margin:0 auto;width:100%;padding:32px 24px 80px}
 .page-view{display:none;animation:fadeUp .35s ease}
 .page-view.on{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-.page-header{margin-bottom:28px}
-.page-title{font-size:1.5rem;font-weight:700;margin-bottom:5px;letter-spacing:-.02em}
-.page-sub{font-size:.8rem;color:var(--text2);line-height:1.6}
-.card{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
-.card-title{font-size:.78rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:16px}
-.divider{height:1px;background:var(--border);margin:20px 0}
-.tag{font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;padding:3px 9px;border-radius:4px}
-.tag-green{background:var(--gd);color:var(--green);border:1px solid rgba(31,216,158,.2)}
-.tag-yellow{background:var(--yd);color:var(--yellow);border:1px solid rgba(240,192,64,.2)}
-.tag-red{background:var(--rd);color:var(--red);border:1px solid rgba(240,88,88,.2)}
-.tag-blue{background:var(--bd);color:var(--blue);border:1px solid rgba(91,156,246,.2)}
-.tag-violet{background:var(--vd);color:var(--violet);border:1px solid rgba(139,124,248,.2)}
+.page-header{margin-bottom:32px}
+.page-title{font-size:1.6rem;font-weight:800;margin-bottom:6px;letter-spacing:-.02em}
+.page-sub{font-size:.82rem;color:var(--text2);line-height:1.6}
+.card{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:0 4px 20px rgba(0,0,0,0.15)}
+.card-title{font-size:.82rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:18px}
+.divider{height:1px;background:var(--border);margin:24px 0}
+.tag{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:3px 9px;border-radius:4px;display:inline-flex;align-items:center}
+.tag-green{background:var(--gd);color:var(--green);border:1px solid rgba(18,227,160,.15)}
+.tag-yellow{background:var(--yd);color:var(--yellow);border:1px solid rgba(243,198,63,.15)}
+.tag-red{background:var(--rd);color:var(--red);border:1px solid rgba(248,94,94,.15)}
+.tag-blue{background:var(--bd);color:var(--blue);border:1px solid rgba(79,162,255,.15)}
+.tag-violet{background:var(--vd);color:var(--violet);border:1px solid rgba(139,92,246,.15)}
 
-.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:50px;font-size:.78rem;font-weight:600;cursor:pointer;border:none;font-family:'Sora',sans-serif;transition:all .25s}
-.btn-primary{background:linear-gradient(135deg,#8b7cf8,#5b9cf6);color:#fff;box-shadow:0 4px 16px rgba(139,124,248,.25)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(139,124,248,.35)}
-.btn-green{background:linear-gradient(135deg,#1fd89e,#12a872);color:#0b0d14;box-shadow:0 4px 16px rgba(31,216,158,.2)}
-.btn-green:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(31,216,158,.3)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:50px;font-size:.8rem;font-weight:700;cursor:pointer;border:none;font-family:'Sora',sans-serif;transition:all .25s;justify-content:center}
+.btn-primary{background:linear-gradient(135deg,#8b5cf6,#4fa2ff);color:#fff;box-shadow:0 4px 16px rgba(139,92,246,.2)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(139,92,246,.3)}
+.btn-green{background:linear-gradient(135deg,#12e3a0,#0d9f70);color:#08090f;box-shadow:0 4px 16px rgba(18,227,160,.15)}
+.btn-green:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(18,227,160,.25)}
 .btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2)}
-.btn-ghost:hover{color:var(--text);border-color:var(--border2);background:var(--s2)}
-.btn-sm{padding:7px 14px;font-size:.7rem}
-.btn-danger{background:var(--rd);color:var(--red);border:1px solid rgba(240,88,88,.2)}
-.btn-danger:hover{background:rgba(240,88,88,.2)}
+.btn-ghost:hover{color:var(--text);border-color:var(--text2);background:var(--s2)}
+.btn-sm{padding:7px 14px;font-size:.72rem}
+.btn-danger{background:var(--rd);color:var(--red);border:1px solid rgba(248,94,94,.15)}
+.btn-danger:hover{background:rgba(248,94,94,.15)}
 
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.form-group{display:flex;flex-direction:column;gap:5px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
 
-.range-group{margin-bottom:14px}
-.rr{display:flex;justify-content:space-between;margin-bottom:7px;align-items:center}
-.rl{font-size:.72rem;color:var(--text2)}
-.rv{font-size:.82rem;font-weight:700;color:var(--text)}
-input[type=range]{width:100%;-webkit-appearance:none;height:3px;background:var(--s3);border-radius:2px;outline:none;cursor:pointer}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--violet);box-shadow:0 2px 8px rgba(139,124,248,.4);cursor:pointer;transition:transform .2s}
-input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
+.range-group{margin-bottom:16px}
+.rr{display:flex;justify-content:space-between;margin-bottom:6px;align-items:center}
+.rl{font-size:.75rem;color:var(--text2)}
+.rv{font-size:.85rem;font-weight:700;color:var(--text)}
+input[type=range]{width:100%;-webkit-appearance:none;height:4px;background:var(--s3);border-radius:2px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--violet);box-shadow:0 2px 8px rgba(139,92,246,.4);cursor:pointer;transition:transform .2s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 
-.emi-row{display:grid;grid-template-columns:1fr 140px 34px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.emi-row{display:grid;grid-template-columns:1fr 140px 34px;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
 .emi-row:last-child{border-bottom:none}
-.emi-rm{background:none;border:none;color:var(--text3);cursor:pointer;font-size:1rem;padding:4px;border-radius:6px;transition:color .2s}
+.emi-rm{background:none;border:none;color:var(--text3);cursor:pointer;font-size:1.1rem;padding:4px;border-radius:6px;transition:color .2s}
 .emi-rm:hover{color:var(--red)}
-.add-emi-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px dashed var(--border2);color:var(--text2);padding:8px 14px;border-radius:var(--rsm);font-size:.72rem;font-weight:500;cursor:pointer;transition:all .2s;font-family:'Sora',sans-serif;margin-top:8px}
+.add-emi-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px dashed var(--border2);color:var(--text2);padding:9px 16px;border-radius:var(--rsm);font-size:.75rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Sora',sans-serif;margin-top:8px}
 .add-emi-btn:hover{border-color:var(--violet);color:var(--violet)}
 
-.prog{height:5px;background:var(--s3);border-radius:3px;overflow:hidden;margin-top:6px}
-.prog-fill{height:100%;border-radius:3px;transition:width 1.2s ease}
-.pf-g{background:linear-gradient(90deg,#1fd89e,#12a872)}
-.pf-y{background:linear-gradient(90deg,#f0c040,#d4a020)}
-.pf-r{background:linear-gradient(90deg,#f05858,#c03030)}
+.prog{height:6px;background:var(--s3);border-radius:3px;overflow:hidden;margin-top:6px}
+.prog-fill{height:100%;border-radius:3px;transition:width 1s ease}
+.pf-g{background:linear-gradient(90deg,#12e3a0,#0d9f70)}
+.pf-y{background:linear-gradient(90deg,#f3c63f,#bf9826)}
+.pf-r{background:linear-gradient(90deg,#f85e5e,#c43b3b)}
+.pf-b{background:linear-gradient(90deg,#4fa2ff,#1a75d9)}
+.pf-v{background:linear-gradient(90deg,#8b5cf6,#6333c4)}
 
-.mcard{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;position:relative;overflow:hidden}
-.mcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--mc-accent,var(--violet))}
-.mc-lbl{font-size:.62rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
-.mc-val{font-size:1.75rem;font-weight:700;line-height:1;margin-bottom:5px}
-.mc-sub{font-size:.68rem;color:var(--text2);line-height:1.4}
+.mcard{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:relative;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.12)}
+.mcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--mc-accent,var(--violet))}
+.mc-lbl{font-size:.64rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.mc-val{font-size:1.8rem;font-weight:800;line-height:1;margin-bottom:6px}
+.mc-sub{font-size:.7rem;color:var(--text2);line-height:1.4}
 
-.insight{background:var(--s2);border:1px solid var(--border);border-left:3px solid var(--violet);border-radius:var(--radius);padding:18px 20px}
-.insight-label{font-size:.62rem;font-weight:600;color:var(--violet);text-transform:uppercase;letter-spacing:.08em;margin-bottom:9px}
-.insight-text{font-size:.85rem;line-height:1.75;color:var(--text2);font-family:'Lora',serif;font-style:italic}
-.insight-text strong{color:var(--text);font-style:normal;font-family:'Sora',sans-serif}
+.insight{background:var(--s2);border:1px solid var(--border);border-left:4px solid var(--violet);border-radius:var(--radius);padding:18px 22px}
+.insight-label{font-size:.65rem;font-weight:700;color:var(--violet);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.insight-text{font-size:.88rem;line-height:1.7;color:var(--text2);font-family:'Lora',serif;font-style:italic}
+.insight-text strong{color:var(--text);font-style:normal;font-family:'Sora',sans-serif;font-weight:600}
 
-.target-bar-wrap{background:var(--s2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px}
+.target-bar-wrap{background:var(--s2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px}
 .tb-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.tb-title{font-size:.78rem;font-weight:600}
-.tb-gap{font-size:.75rem;font-weight:700}
-.tb-bar{position:relative;height:10px;background:var(--s3);border-radius:5px;overflow:visible}
-.tb-fill{position:absolute;top:0;left:0;height:100%;border-radius:5px;transition:width 1s ease;z-index:1}
-.tb-target-line{position:absolute;top:-4px;height:18px;width:2px;background:var(--yellow);border-radius:1px;z-index:2}
-.tb-labels{display:flex;justify-content:space-between;font-size:.6rem;color:var(--text3);margin-top:6px}
+.tb-title{font-size:.78rem;font-weight:700}
+.tb-gap{font-size:.76rem;font-weight:700}
+.tb-bar{position:relative;height:12px;background:var(--s3);border-radius:6px;overflow:visible}
+.tb-fill{position:absolute;top:0;left:0;height:100%;border-radius:6px;transition:width 1s ease;z-index:1}
+.tb-target-line{position:absolute;top:-4px;height:20px;width:3px;background:var(--yellow);border-radius:2px;z-index:2;box-shadow:0 0 6px var(--yellow)}
+.tb-labels{display:flex;justify-content:space-between;font-size:.62rem;color:var(--text3);margin-top:6px}
 
-.chart-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
-.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
-.chart-title{font-size:.85rem;font-weight:600}
-.chart-legend{display:flex;gap:14px;flex-wrap:wrap}
-.cl-item{display:flex;align-items:center;gap:6px;font-size:.66rem;color:var(--text2)}
+.chart-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+.chart-title{font-size:.85rem;font-weight:700;color:var(--text)}
+.chart-legend{display:flex;gap:16px;flex-wrap:wrap}
+.cl-item{display:flex;align-items:center;gap:6px;font-size:.68rem;color:var(--text2)}
 .cl-dot{width:8px;height:8px;border-radius:50%}
-.chart-wrap{position:relative;height:250px}
+.chart-wrap{position:relative;height:260px}
 
 .scenario-list{display:flex;flex-direction:column;gap:10px}
-.scard{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;align-items:center;gap:16px;transition:border-color .25s;cursor:pointer}
-.scard:hover{border-color:var(--border2)}
-.scard.selected{border-color:rgba(139,124,248,.5);background:var(--vd)}
-.scard-icon{font-size:1.5rem;flex-shrink:0;width:44px;height:44px;background:var(--s2);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.scard{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;align-items:center;gap:16px;transition:all .2s;cursor:pointer;position:relative}
+.scard:hover{border-color:var(--border2);background:rgba(255,255,255,0.01)}
+.scard.selected{border-color:rgba(139,92,246,.4);background:var(--vd)}
+.scard-icon{font-size:1.5rem;flex-shrink:0;width:44px;height:44px;background:var(--s2);border-radius:12px;display:flex;align-items:center;justify-content:center}
 .scard-info{flex:1}
-.scard-name{font-size:.85rem;font-weight:600;margin-bottom:3px}
-.scard-desc{font-size:.7rem;color:var(--text2)}
-.scard-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
-.scard.selected .scard-check{background:var(--violet);border-color:var(--violet)}
+.scard-name{font-size:.85rem;font-weight:700;margin-bottom:3px}
+.scard-desc{font-size:.72rem;color:var(--text2)}
+.scard-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;color:transparent;font-weight:700;font-size:.7rem}
+.scard.selected .scard-check{background:var(--violet);border-color:var(--violet);color:#fff}
 
 .comp-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
-.comp-table{width:100%;border-collapse:collapse;min-width:600px}
-.comp-table th{padding:12px 16px;text-align:left;background:var(--s2);font-size:.65rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--border)}
-.comp-table td{padding:13px 16px;font-size:.78rem;color:var(--text2);border-bottom:1px solid var(--border)}
+.comp-table{width:100%;border-collapse:collapse;min-width:640px}
+.comp-table th{padding:14px 18px;text-align:left;background:var(--s2);font-size:.65rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border)}
+.comp-table td{padding:14px 18px;font-size:.8rem;color:var(--text2);border-bottom:1px solid var(--border)}
 .comp-table tr:last-child td{border-bottom:none}
-.comp-table td.col-name{color:var(--text);font-weight:500}
-.best-badge{font-size:.58rem;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:var(--gd);color:var(--green);border:1px solid rgba(31,216,158,.25);margin-left:6px;letter-spacing:.06em}
-.risk-badge{font-size:.58rem;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-left:6px;letter-spacing:.06em}
-.rb-worst{font-size:.58px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:var(--rd);color:var(--red);border:1px solid rgba(240,88,88,.25);margin-left:6px;letter-spacing:.06em}
+.comp-table td.col-name{color:var(--text);font-weight:600}
+.best-badge{font-size:.58rem;font-weight:800;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:var(--gd);color:var(--green);border:1px solid rgba(18,227,160,.2);margin-left:6px;letter-spacing:.06em}
+.rb-worst{font-size:.58rem;font-weight:800;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:var(--rd);color:var(--red);border:1px solid rgba(248,94,94,.2);margin-left:6px;letter-spacing:.06em}
 
-.advice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
-.adv{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-sm,10px);padding:16px}
-.adv-icon{font-size:1.2rem;margin-bottom:6px}
-.adv-title{font-size:.78rem;font-weight:600;margin-bottom:5px}
-.adv-desc{font-size:.7rem;line-height:1.6;color:var(--text2)}
-.adv.good{border-color:rgba(31,216,158,.2)}
-.adv.warn{border-color:rgba(240,192,64,.15)}
-.adv.bad{border-color:rgba(240,88,88,.2)}
+.advice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.adv{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:18px;transition:border-color .2s}
+.adv-icon{font-size:1.4rem;margin-bottom:8px}
+.adv-title{font-size:.82rem;font-weight:700;margin-bottom:6px}
+.adv-desc{font-size:.72rem;line-height:1.6;color:var(--text2)}
+.adv.good{border-color:rgba(18,227,160,.15)}
+.adv.warn{border-color:rgba(243,198,63,.15)}
+.adv.bad{border-color:rgba(248,94,94,.15)}
+
+.goals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.goal-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius);padding:20px;transition:all .2s;position:relative}
+.goal-card:hover{border-color:var(--border2)}
+.goal-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.goal-title{font-size:.88rem;font-weight:700;color:var(--text)}
+.goal-category{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--violet)}
+.goal-stat{font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:4px}
+.goal-meta{font-size:.7rem;color:var(--text2);line-height:1.4}
+.goal-actions{margin-top:16px;display:flex;justify-content:flex-end;gap:8px}
 
 .saved-item{display:flex;align-items:center;gap:12px;padding:14px;background:var(--s1);border:1px solid var(--border);border-radius:var(--rsm);transition:border-color .2s}
 .saved-item:hover{border-color:var(--border2)}
-.si-icon{font-size:1.2rem;width:36px;height:36px;background:var(--s2);border-radius:8px;display:flex;align-items:center;justify-content:center}
-.si-name{font-size:.82rem;font-weight:600;margin-bottom:2px}
-.si-meta{font-size:.66rem;color:var(--text3)}
-.si-actions{margin-left:auto;display:flex;gap:6px}
+.si-icon{font-size:1.3rem;width:40px;height:40px;background:var(--s2);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.si-name{font-size:.82rem;font-weight:700;margin-bottom:2px}
+.si-meta{font-size:.68rem;color:var(--text3)}
+.si-actions{margin-left:auto;display:flex;gap:8px}
 
-.hist-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--s1);border:1px solid var(--border);border-radius:var(--rsm);cursor:pointer;transition:all .2s}
+.hist-item{display:flex;align-items:center;gap:14px;padding:14px;background:var(--s1);border:1px solid var(--border);border-radius:var(--rsm);cursor:pointer;transition:all .2s}
 .hist-item:hover{border-color:var(--border2);background:var(--s2)}
-.hi-date{font-size:.7rem;color:var(--text3);margin-bottom:3px}
-.hi-title{font-size:.8rem;font-weight:500}
+.hi-date{font-size:.72rem;color:var(--text3);margin-bottom:3px}
+.hi-title{font-size:.82rem;font-weight:600}
 .hi-badges{display:flex;gap:6px;margin-top:4px}
 
-.spin-overlay{position:fixed;inset:0;background:rgba(11,13,20,.85);display:flex;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(8px)}
-.spinner{width:44px;height:44px;border:3px solid var(--border2);border-top-color:var(--violet);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+.spin-overlay{position:fixed;inset:0;background:rgba(8,9,15,.9);display:flex;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(8px)}
+.spinner{width:48px;height:48px;border:3px solid var(--border2);border-top-color:var(--violet);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.spin-text{font-size:.82rem;color:var(--text2);text-align:center}
+.spin-text{font-size:.85rem;color:var(--text2);text-align:center}
 
 .empty{text-align:center;padding:48px 24px;color:var(--text3)}
-.empty-icon{font-size:2.5rem;margin-bottom:12px}
-.empty-text{font-size:.82rem;line-height:1.6}
+.empty-icon{font-size:2.8rem;margin-bottom:14px}
+.empty-text{font-size:.85rem;line-height:1.6}
 
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--s3);border:1px solid var(--border2);padding:11px 22px;border-radius:50px;font-size:.78rem;color:var(--text);z-index:1000;animation:toastIn .3s ease;white-space:nowrap}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:var(--s3);border:1px solid var(--border2);padding:12px 24px;border-radius:50px;font-size:.8rem;color:var(--text);z-index:1000;animation:toastIn .3s ease;white-space:nowrap;box-shadow:var(--shadow)}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
-.mc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
-.mc-stat{background:var(--s2);border-radius:var(--rsm);padding:14px;text-align:center}
-.mc-stat-val{font-size:1.4rem;font-weight:700;margin-bottom:4px}
-.mc-stat-lbl{font-size:.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+.wizard-card{
+  background:linear-gradient(135deg,rgba(139,92,246,0.06),rgba(79,162,255,0.04));
+  border:1px solid rgba(139,92,246,0.15);border-radius:var(--radius);padding:24px;
+}
+.wiz-title{font-size:1.05rem;font-weight:700;margin-bottom:16px}
+.wiz-step{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px;transition:opacity 0.3s}
+.wiz-step:last-child{margin-bottom:0}
+.wiz-num{
+  width:24px;height:24px;border-radius:50%;background:var(--s3);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--text2);flex-shrink:0;
+}
+.wiz-step.active .wiz-num{background:var(--violet);color:#fff;border-color:var(--violet)}
+.wiz-step.completed .wiz-num{background:var(--green);color:var(--bg);border-color:var(--green)}
+.wiz-step.completed .wiz-heading{color:var(--green);text-decoration:line-through}
+.wiz-step.disabled{opacity:0.4;pointer-events:none}
+.wiz-content{flex:1}
+.wiz-heading{font-size:.82rem;font-weight:700;margin-bottom:3px}
+.wiz-body{font-size:.72rem;color:var(--text2);line-height:1.5}
 
+/* Tooltip Styles */
+.tooltip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 6px;
+}
+.tooltip-icon {
+  font-size: 0.65rem;
+  color: var(--text3);
+  background: var(--s2);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+  font-weight: 700;
+}
+.tooltip:hover .tooltip-icon, .tooltip:focus .tooltip-icon {
+  color: var(--text2);
+  border-color: var(--text2);
+}
+.tooltip-text {
+  visibility: hidden;
+  width: 220px;
+  background-color: var(--s2);
+  color: var(--text2);
+  text-align: left;
+  border-radius: 8px;
+  padding: 10px 12px;
+  position: absolute;
+  z-index: 99;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.25s, transform 0.25s;
+  font-size: 0.7rem;
+  font-weight: normal;
+  text-transform: none;
+  letter-spacing: normal;
+  line-height: 1.4;
+  border: 1px solid var(--border2);
+  box-shadow: var(--shadow);
+  pointer-events: none;
+}
+.tooltip:hover .tooltip-text, .tooltip:focus .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+/* Footer Styles */
+.app-footer {
+  text-align: center;
+  padding: 24px;
+  background: var(--s1);
+  border-top: 1px solid var(--border);
+  color: var(--text3);
+  font-size: 0.7rem;
+  line-height: 1.5;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+.app-footer a {
+  color: var(--blue);
+  text-decoration: none;
+}
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+@media(max-width:900px){
+  .grid4{grid-template-columns:1fr 1fr}
+}
 @media(max-width:768px){
   .nav-toggle{display:inline-flex}
   .topbar-nav-wrap{
-    position:fixed;top:58px;left:0;right:0;z-index:199;
-    background:rgba(11,13,20,.98);backdrop-filter:blur(12px);
+    position:fixed;top:64px;left:0;right:0;z-index:199;
+    background:rgba(8,9,15,.98);backdrop-filter:blur(16px);
     border-bottom:1px solid var(--border);
-    box-shadow:0 12px 32px rgba(0,0,0,.45);
-    padding:12px 16px 16px;display:none;flex-direction:column;align-items:stretch
+    box-shadow:0 12px 32px rgba(0,0,0,.5);
+    padding:16px;display:none;flex-direction:column;align-items:stretch
   }
   .topbar-nav-wrap.mobile-open{display:flex}
-  .topbar-nav{flex-direction:column;width:100%}
+  .topbar-nav{flex-direction:column;width:100%;gap:4px}
   .tnav{width:100%;text-align:left;padding:12px 14px}
+  .grid3{grid-template-columns:1fr 1fr}
+  .comp-table th,.comp-table td{padding:12px 14px}
+}
+@media(max-width:550px){
   .grid2,.grid3,.grid4{grid-template-columns:1fr}
-  .comp-table th,.comp-table td{padding:10px 12px}
-  .mc-row{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:500px){
-  .land-title{font-size:2.2rem}
+  .land-title{font-size:2.4rem}
   .app-content{padding:20px 16px 60px}
 }
 </style>
@@ -274,14 +391,14 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
   <div class="land-glow lg2"></div>
   <div class="land-badge" style="position:relative;z-index:1"><div class="badge-dot"></div>Free · Privacy-first · Built for India</div>
   <h1 class="land-title" style="position:relative;z-index:1">Know your money's<br/><span class="g">future before it happens</span></h1>
-  <p class="land-sub" style="position:relative;z-index:1">Your personal financial digital twin. Test salary cuts, new EMIs, rent hikes — and see exactly how safe your money is over the next 6–24 months.</p>
+  <p class="land-sub" style="position:relative;z-index:1">See your future money mirror. Plan goals, test salary cuts, new EMIs, rent hikes — and verify how your choices today shape the next 5 years.</p>
   <button class="land-cta" style="position:relative;z-index:1" onclick="openAuth()">Get started free →</button>
   <div class="land-chips">
     <div class="lchip">Financial Digital Twin</div>
-    <div class="lchip">6–24 Month Forecast</div>
-    <div class="lchip">Safety Target Tracker</div>
-    <div class="lchip">Save & Compare Plans</div>
-    <div class="lchip">🇮🇳 UPI + EMI India</div>
+    <div class="lchip">1–5 Year Simulations</div>
+    <div class="lchip">Goals Success Probability</div>
+    <div class="lchip">Scenario Comparisons</div>
+    <div class="lchip">🇮🇳 UPI & EMI Model</div>
   </div>
 </div>
 
@@ -324,23 +441,29 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
 
 <div id="page-app" class="hidden">
   <nav class="topbar">
-    <div class="topbar-logo">Money<span>Mirror</span></div>
+    <div class="topbar-logo" onclick="showPage('dashboard')">🪞 Money<span>Mirror</span></div>
     <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Open menu" onclick="toggleMobileNav()">☰</button>
     <div class="topbar-nav-wrap" id="topbar-nav-wrap">
       <div class="topbar-nav">
         <button class="tnav on" id="nav-dashboard" onclick="showPage('dashboard')">Dashboard</button>
-        <button class="tnav" id="nav-profile" onclick="showPage('profile')">My Profile</button>
-        <button class="tnav" id="nav-scenarios" onclick="showPage('scenarios')">Scenarios</button>
-        <button class="tnav" id="nav-simulate" onclick="showPage('simulate')">Simulate</button>
+        <button class="tnav" id="nav-simulations" onclick="showPage('simulations')">Simulations</button>
+        <button class="tnav" id="nav-goals" onclick="showPage('goals')">Goals</button>
+        <button class="tnav" id="nav-insights" onclick="showPage('insights')">Insights</button>
         <button class="tnav" id="nav-history" onclick="showPage('history')">History</button>
+        <button class="tnav" id="nav-settings" onclick="showPage('settings')">Settings</button>
+        <button class="tnav" id="nav-about" onclick="showPage('about')">About &amp; Help</button>
       </div>
     </div>
     <div class="topbar-right">
-      <div class="user-chip">
+      <div class="user-chip" onclick="toggleProfileDropdown(event)">
         <div class="user-avatar" id="user-avatar">A</div>
         <span id="user-name-display">User</span>
+        <span class="dropdown-icon">▼</span>
       </div>
-      <button class="logout-btn" onclick="doLogout()">Sign out</button>
+      <div class="profile-dropdown hidden" id="profile-dropdown">
+        <button class="dropdown-item" onclick="showPage('settings')">Profile Settings</button>
+        <button class="dropdown-item danger" onclick="doLogout()">Sign out</button>
+      </div>
     </div>
   </nav>
 
@@ -350,150 +473,333 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
     <div class="page-view on" id="page-dashboard">
       <div class="page-header">
         <h1 class="page-title">Dashboard</h1>
-        <p class="page-sub">Your financial health at a glance. Run a simulation to see your full picture.</p>
+        <p class="page-sub" id="dashboard-hero-title">See your future money mirror — how your choices today shape the next 1 to 5 years.</p>
       </div>
       <div id="dashboard-content">
-        <div class="empty"><div class="empty-icon">🪞</div><div class="empty-text">No simulation yet.<br/>Set up your profile and run your first simulation.</div><button class="btn btn-primary mt16" onclick="showPage('profile')">Set up profile →</button></div>
+        <!-- Dashboard Mockup state / placeholder dynamically updated in init -->
       </div>
     </div>
 
-    <div class="page-view" id="page-profile">
+    <!-- ── SIMULATIONS ── -->
+    <div class="page-view" id="page-simulations">
       <div class="page-header">
-        <h1 class="page-title">My Financial Profile</h1>
-        <p class="page-sub">Enter your income, expenses, and EMIs. This is the foundation of your financial twin.</p>
-        <p class="page-sub mt8" style="padding:12px 14px;background:var(--s2);border-radius:var(--rsm);border:1px solid var(--border);max-width:720px">
-          We only use monthly summary numbers you type here — no bank SMS or screen scraping. Your data stays with this account for planning.
-        </p>
+        <h1 class="page-title">What-If Simulations</h1>
+        <p class="page-sub">Create stress scenarios (salary cut, job loss, rent hike) and compare them with your baseline plan.</p>
+      </div>
+      
+      <div class="grid2">
+        <!-- Left: Scenario Management -->
+        <div class="flex" style="flex-direction:column; gap:16px">
+          <div class="card">
+            <div class="flex fac" style="justify-content:space-between; margin-bottom:16px">
+              <span class="card-title" style="margin-bottom:0">Active Scenarios</span>
+              <button class="btn btn-primary btn-sm" onclick="openNewScenario()">+ New scenario</button>
+            </div>
+            
+            <div class="card mb12" style="background:var(--s2); border:1px dashed var(--border)">
+              <div class="card-title" style="font-size:.65rem; margin-bottom:8px">Quick Add Templates</div>
+              <div class="flex fgap8 fwrap">
+                <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('salary-cut')">−30% salary</button>
+                <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('job-loss')">Job loss</button>
+                <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('new-emi')">New EMI</button>
+                <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('rent-hike')">+Rent</button>
+                <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('lifestyle-up')">+15% Spend</button>
+                <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('medical')">Medical bill</button>
+              </div>
+            </div>
+            
+            <div id="scenarios-list-content"></div>
+          </div>
+          
+          <div id="scenario-editor" class="hidden card">
+            <div class="card-title" id="editor-title">New Scenario</div>
+            <div class="form-group mb12">
+              <label class="flabel">Scenario Name</label>
+              <input class="finput" type="text" id="sc-name" placeholder="e.g. Job Loss Nov"/>
+            </div>
+            <div class="form-group mb12">
+              <label class="flabel">Scenario Type</label>
+              <select class="finput" id="sc-type" onchange="onScenarioTypeChange()">
+                <option value="">Select type...</option>
+                <option value="salary-cut">📉 Salary Cut</option>
+                <option value="job-loss">💼 Job Loss</option>
+                <option value="new-emi">🏍️ New EMI</option>
+                <option value="rent-hike">🏠 Rent Hike</option>
+                <option value="lifestyle-up">✨ Lifestyle Upgrade</option>
+                <option value="medical">🏥 Medical Emergency</option>
+              </select>
+            </div>
+            <div id="sc-params"></div>
+            <div class="flex fgap12 mt16">
+              <button class="btn btn-primary btn-sm" onclick="saveScenario()">Save scenario</button>
+              <button class="btn btn-ghost btn-sm" onclick="closeScenarioEditor()">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Run & Choose Options -->
+        <div class="card" style="align-self: flex-start">
+          <div class="card-title">Run Settings</div>
+          
+          <div class="form-group mb16">
+            <label class="flabel">Select Scenarios to Test & Compare</label>
+            <div id="sim-scenarios-list" class="scenario-list"></div>
+          </div>
+
+          <div class="form-group mb16">
+            <label class="flabel">Forecast Horizon</label>
+            <select class="finput" id="sim-horizon" onchange="updateProfileSettingsLocally()">
+              <option value="6">6 months</option>
+              <option value="12" selected>12 months</option>
+              <option value="18">18 months</option>
+              <option value="24">24 months</option>
+              <option value="36">3 years</option>
+              <option value="60">5 years</option>
+            </select>
+          </div>
+
+          <div class="form-group mb24">
+            <label class="flabel">Market / Growth Mode</label>
+            <select class="finput" id="sim-mode">
+              <option value="conservative">Conservative (4% Interest, +10% Variable Buffer)</option>
+              <option value="moderate" selected>Moderate (8% Interest, Standard Costs)</option>
+              <option value="aggressive">Aggressive (12% Interest, -5% Variable costs)</option>
+            </select>
+            <span class="fhint">Wealth growth rate and expense buffers modeled.</span>
+          </div>
+
+          <button class="btn btn-green" style="width:100%" onclick="runSimulation()">🔮 Try a what-if scenario</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── GOALS ── -->
+    <div class="page-view" id="page-goals">
+      <div class="page-header">
+        <div class="flex fac" style="justify-content:space-between;flex-wrap:wrap;gap:12px">
+          <div>
+            <h1 class="page-title">Financial Goals</h1>
+            <p class="page-sub">Plan important milestones (Laptop in 6 months, MS in 3 years) and track if your choices support them.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openNewGoal()">+ Plan a goal</button>
+        </div>
+      </div>
+      
+      <div class="goals-grid" id="goals-list-content"></div>
+
+      <div id="goal-editor" class="hidden card mt24" style="max-width:500px; margin: 24px auto 0">
+        <div class="card-title" id="goal-editor-title">New Goal</div>
+        
+        <div class="form-group mb12">
+          <label class="flabel">Goal Name</label>
+          <input class="finput" type="text" id="g-name" placeholder="e.g. Master's Degree Prep"/>
+        </div>
+        
+        <div class="form-group mb12">
+          <label class="flabel">Target Amount (₹)</label>
+          <input class="finput" type="number" id="g-amount" placeholder="e.g. 150000"/>
+        </div>
+
+        <div class="form-group mb12">
+          <label class="flabel">Target Timeline (Months)</label>
+          <div class="range-group" style="margin-bottom:0">
+            <div class="rr">
+              <span class="rl">Target month</span>
+              <span class="rv" id="g-timeline-val">12 months</span>
+            </div>
+            <input type="range" min="1" max="60" value="12" id="g-timeline" oninput="document.getElementById('g-timeline-val').textContent = this.value + ' months'"/>
+          </div>
+        </div>
+
+        <div class="form-group mb24">
+          <label class="flabel">Category</label>
+          <select class="finput" id="g-category">
+            <option value="education">🎓 Education</option>
+            <option value="gadgets">💻 Gadgets & Tech</option>
+            <option value="travel">✈️ Travel & Leasure</option>
+            <option value="vehicle">🏍️ Vehicle / Purchase</option>
+            <option value="savings">💰 Emergency Fund / General</option>
+          </select>
+        </div>
+
+        <div class="flex fgap12">
+          <button class="btn btn-primary btn-sm" onclick="saveGoal()">Save goal</button>
+          <button class="btn btn-ghost btn-sm" onclick="closeGoalEditor()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── INSIGHTS ── -->
+    <div class="page-view" id="page-insights">
+      <div class="page-header">
+        <h1 class="page-title">Personalised Insights</h1>
+        <p class="page-sub">Data-driven observations and suggestions based on your profile inputs and active scenarios.</p>
+      </div>
+      <div id="insights-content">
+        <!-- Dynamically rendered custom recommendations -->
+      </div>
+    </div>
+
+    <!-- ── HISTORY ── -->
+    <div class="page-view" id="page-history">
+      <div class="page-header">
+        <h1 class="page-title">Simulation Run History</h1>
+        <p class="page-sub">Historical records of simulated scenarios. Reload past records onto the dashboard.</p>
+      </div>
+      <div id="history-list" class="flex fgap8" style="flex-direction:column"></div>
+    </div>
+
+    <!-- ── SETTINGS (PROFILE) ── -->
+    <div class="page-view" id="page-settings">
+      <div class="page-header">
+        <h1 class="page-title">Financial Twin Settings</h1>
+        <p class="page-sub">Configure your income, fixed costs, variable costs, and active EMI terms.</p>
       </div>
 
       <div class="card mb16">
-        <div class="card-title">Income</div>
+        <div class="card-title">Income Profile</div>
         <div class="form-grid">
-          <div class="form-group"><label class="flabel">Monthly Take-Home Salary</label><input class="finput" type="number" id="p-income" placeholder="e.g. 65000"/><span class="fhint">After tax, in ₹</span></div>
-          <div class="form-group"><label class="flabel">Other Monthly Income</label><input class="finput" type="number" id="p-other-income" placeholder="e.g. 5000"/><span class="fhint">Freelance, rent received, etc.</span></div>
+          <div class="form-group"><label class="flabel">Monthly Take-Home Salary</label><input class="finput" type="number" id="p-income" placeholder="e.g. 65000"/><span class="fhint">Take home salary in ₹</span></div>
+          <div class="form-group"><label class="flabel">Other Monthly Income</label><input class="finput" type="number" id="p-other-income" placeholder="e.g. 5000"/><span class="fhint">Freelance, investments, etc.</span></div>
         </div>
       </div>
 
       <div class="card mb16">
-        <div class="card-title">Savings & Settings</div>
+        <div class="card-title">Liquid Assets & Thresholds</div>
         <div class="form-grid">
-          <div class="form-group"><label class="flabel">Current Savings</label><input class="finput" type="number" id="p-savings" placeholder="e.g. 120000"/><span class="fhint">Total liquid savings today</span></div>
-          <div class="form-group"><label class="flabel">Minimum Comfortable Balance</label><input class="finput" type="number" id="p-min-balance" placeholder="e.g. 10000"/><span class="fhint">Below this feels like stress</span></div>
-          <div class="form-group"><label class="flabel">Safety Target (months of expenses)</label><input class="finput" type="number" id="p-safety-target" placeholder="e.g. 6" step="0.5"/><span class="fhint">Default 6 months — how many months of spending you want covered by savings</span></div>
+          <div class="form-group"><label class="flabel">Current Liquid Savings</label><input class="finput" type="number" id="p-savings" placeholder="e.g. 120000"/><span class="fhint">Ready savings to start twin</span></div>
+          <div class="form-group"><label class="flabel">Minimum Comfortable Balance</label><input class="finput" type="number" id="p-min-balance" placeholder="e.g. 10000"/><span class="fhint">Safety net floor — dipping below raises risk alerts</span></div>
+          <div class="form-group"><label class="flabel">Emergency Safety Target (Months)</label><input class="finput" type="number" id="p-safety-target" placeholder="e.g. 6" step="0.5"/><span class="fhint">Target emergency buffer of monthly costs</span></div>
           <div class="form-group">
-            <label class="flabel">Forecast Horizon</label>
+            <label class="flabel">Default Simulation Horizon</label>
             <select class="finput" id="p-horizon">
               <option value="6">6 months</option>
               <option value="12" selected>12 months</option>
               <option value="18">18 months</option>
               <option value="24">24 months</option>
+              <option value="36">3 years</option>
+              <option value="60">5 years</option>
             </select>
           </div>
         </div>
       </div>
 
       <div class="card mb16">
-        <div class="card-title">Fixed Expenses (Monthly)</div>
+        <div class="card-title">Monthly Fixed Commitments</div>
         <div class="form-grid">
-          <div class="form-group"><label class="flabel">Rent / PG</label><input class="finput" type="number" id="p-rent" placeholder="e.g. 15000"/></div>
-          <div class="form-group"><label class="flabel">Utilities (electricity, internet, phone)</label><input class="finput" type="number" id="p-utilities" placeholder="e.g. 2000"/></div>
+          <div class="form-group"><label class="flabel">Rent / PG Accommodation</label><input class="finput" type="number" id="p-rent" placeholder="e.g. 15000"/></div>
+          <div class="form-group"><label class="flabel">Utilities (electricity, internet, SIM bills)</label><input class="finput" type="number" id="p-utilities" placeholder="e.g. 2000"/></div>
           <div class="form-group"><label class="flabel">Insurance Premiums</label><input class="finput" type="number" id="p-insurance" placeholder="e.g. 1500"/></div>
-          <div class="form-group"><label class="flabel">Subscriptions (OTT, gym, etc.)</label><input class="finput" type="number" id="p-subscriptions" placeholder="e.g. 800"/></div>
+          <div class="form-group"><label class="flabel">Fixed Subscriptions (Netflix, gyms, etc.)</label><input class="finput" type="number" id="p-subscriptions" placeholder="e.g. 800"/></div>
         </div>
       </div>
 
       <div class="card mb16">
-        <div class="card-title">Variable / Lifestyle Expenses</div>
+        <div class="card-title">Monthly Discretionary / Variable Costs</div>
         <div class="form-grid">
           <div class="form-group"><label class="flabel">Food & Groceries</label><input class="finput" type="number" id="p-food" placeholder="e.g. 6000"/></div>
-          <div class="form-group"><label class="flabel">Transport (fuel / Ola / Metro)</label><input class="finput" type="number" id="p-transport" placeholder="e.g. 3000"/></div>
-          <div class="form-group"><label class="flabel">Dining Out & Entertainment</label><input class="finput" type="number" id="p-dining" placeholder="e.g. 4000"/></div>
-          <div class="form-group"><label class="flabel">Shopping & Personal Care</label><input class="finput" type="number" id="p-shopping" placeholder="e.g. 3000"/></div>
-          <div class="form-group"><label class="flabel">Miscellaneous</label><input class="finput" type="number" id="p-misc" placeholder="e.g. 2000"/></div>
+          <div class="form-group"><label class="flabel">Transport (commutes, cab, fuel)</label><input class="finput" type="number" id="p-transport" placeholder="e.g. 3000"/></div>
+          <div class="form-group"><label class="flabel">Dining Out & Nightlife</label><input class="finput" type="number" id="p-dining" placeholder="e.g. 4000"/></div>
+          <div class="form-group"><label class="flabel">Shopping & Self Care</label><input class="finput" type="number" id="p-shopping" placeholder="e.g. 3000"/></div>
+          <div class="form-group"><label class="flabel">Miscellaneous / Buffers</label><input class="finput" type="number" id="p-misc" placeholder="e.g. 2000"/></div>
         </div>
       </div>
 
       <div class="card mb16">
-        <div class="card-title">EMIs & Loan Repayments</div>
+        <div class="card-title">EMIs & Loan Outstanding Liabilities</div>
         <div id="emi-list"></div>
         <button class="add-emi-btn" onclick="addEMIRow()">+ Add EMI / Loan</button>
       </div>
 
-      <div class="flex fgap12" style="flex-wrap:wrap">
-        <button class="btn btn-primary" onclick="saveProfile()">💾 Save profile</button>
-        <button class="btn btn-green" onclick="saveProfile(true)">🔮 Save &amp; run baseline</button>
+      <div class="flex fgap12">
+        <button class="btn btn-primary" onclick="saveProfile()">💾 Save Settings</button>
+        <button class="btn btn-green" onclick="saveProfile(true)">🔮 Save &amp; Run Twin Baseline</button>
       </div>
     </div>
 
-    <div class="page-view" id="page-scenarios">
+    <!-- ── ABOUT & HELP ── -->
+    <div class="page-view" id="page-about">
       <div class="page-header">
-        <div class="flex fac" style="justify-content:space-between;flex-wrap:wrap;gap:12px">
-          <div><h1 class="page-title">Saved Scenarios</h1><p class="page-sub">Create and manage your what-if scenarios. Select them in Simulate to compare.</p></div>
-          <button class="btn btn-primary" onclick="openNewScenario()">+ New scenario</button>
-        </div>
+        <h1 class="page-title">About &amp; Help Guide</h1>
+        <p class="page-sub">Understand the platform's scope, core metrics, and safety disclaimers.</p>
       </div>
+
       <div class="card mb16">
-        <div class="card-title">Quick add — opinionated defaults</div>
-        <p class="fs12 c2 mb12">One tap to add a common what-if. You can edit details after.</p>
-        <div class="flex fgap8" style="flex-wrap:wrap">
-          <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('salary-cut')">−30% salary · 6 mo</button>
-          <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('job-loss')">3‑month job loss</button>
-          <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('new-emi')">New EMI ₹3,000</button>
-          <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('rent-hike')">+₹2,000 rent</button>
-          <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('lifestyle-up')">Lifestyle +15%</button>
-          <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTemplate('medical')">Medical ₹50k</button>
-        </div>
-      </div>
-      <div id="scenarios-list-content"></div>
-
-      <div id="scenario-editor" class="hidden">
-        <div class="divider"></div>
-        <div class="card mt16">
-          <div class="card-title" id="editor-title">New Scenario</div>
-          <div class="form-group mb16">
-            <label class="flabel">Scenario Name</label>
-            <input class="finput" type="text" id="sc-name" placeholder="e.g. Job Loss Jan 2025"/>
+        <div class="card-title">📖 How it works &amp; Core Metrics</div>
+        <p class="fs14 c2 mb16">Money Mirror utilizes a deterministic financial projection engine to simulate your cash flow over the selected horizon, accounting for interest growth, fixed costs, variable multipliers, and stress scenarios.</p>
+        
+        <div class="grid2 mb24">
+          <div class="card" style="background:var(--s2); border:1px solid var(--border)">
+            <div class="fw600 fs14 violet mb8">🛡️ Safety Runway</div>
+            <p class="fs12 c2">The number of months your savings are projected to last before falling below your specified <strong>Minimum Comfortable Balance</strong> if your income stops. Under 2 months indicates high risk, while 6+ months is highly secure.</p>
           </div>
-          <div class="form-group mb16">
-            <label class="flabel">Scenario Type</label>
-            <select class="finput" id="sc-type" onchange="onScenarioTypeChange()">
-              <option value="">Select type...</option>
-              <option value="salary-cut">📉 Salary Cut</option>
-              <option value="job-loss">💼 Job Loss</option>
-              <option value="new-emi">🏍️ New EMI</option>
-              <option value="rent-hike">🏠 Rent Hike</option>
-              <option value="lifestyle-up">✨ Lifestyle Upgrade</option>
-              <option value="medical">🏥 Medical Emergency</option>
-            </select>
+          <div class="card" style="background:var(--s2); border:1px solid var(--border)">
+            <div class="fw600 fs14 green mb8">🏦 Emergency Fund Ratio</div>
+            <p class="fs12 c2">Your savings divided by your total monthly expenses. This metric models how many months of standard living cost coverage you currently hold in liquid cash. Aim for at least 3.0&times;.</p>
           </div>
-          <div id="sc-params"></div>
-          <div class="flex fgap12 mt16">
-            <button class="btn btn-primary" onclick="saveScenario()">Save scenario</button>
-            <button class="btn btn-ghost" onclick="closeScenarioEditor()">Cancel</button>
+          <div class="card" style="background:var(--s2); border:1px solid var(--border)">
+            <div class="fw600 fs14 red mb8">📊 Debt-to-Income (DTI) Ratio</div>
+            <p class="fs12 c2">The percentage of your monthly income spent on EMI liabilities. Calculated as <code>Total EMIs / Total Income</code>. Ratios exceeding 40% (Caution) or 50% (High Risk) require corrective action.</p>
+          </div>
+          <div class="card" style="background:var(--s2); border:1px solid var(--border)">
+            <div class="fw600 fs14 blue mb8">📈 Market Modes &amp; Horizons</div>
+            <p class="fs12 c2">Adjusts interest rates and variable expense margins:
+              <br/>&bull; <strong>Conservative</strong>: 4% annual interest + 10% variable buffer.
+              <br/>&bull; <strong>Moderate</strong>: 8% annual interest.
+              <br/>&bull; <strong>Aggressive</strong>: 12% annual interest - 5% variable buffer.
+            </p>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="page-view" id="page-simulate">
-      <div class="page-header">
-        <h1 class="page-title">Run Simulation</h1>
-        <p class="page-sub">Select which scenarios you want to test and compare against your baseline plan.</p>
+        <div class="card" style="background:var(--s3); border:1px solid var(--border)">
+          <div class="fw600 fs14 yellow mb8">💡 A Concrete Example:</div>
+          <p class="fs13 c2" style="line-height: 1.6">
+            Suppose your profile inputs are:
+            <br/>&bull; <strong>Take-Home Salary</strong>: ₹40,000 | <strong>Savings</strong>: ₹60,000 | <strong>Minimum Comfort Balance</strong>: ₹10,000
+            <br/>&bull; <strong>Fixed Costs (Rent + Utilities)</strong>: ₹10,000
+            <br/>&bull; <strong>Discretionary / Variable Costs</strong>: ₹10,000
+            <br/>&bull; <strong>EMIs</strong>: ₹12,000 (DTI ratio: 30%)
+            <br/><strong>Results</strong>: Your total monthly expenses are ₹32,000, leaving a monthly cash surplus of ₹8,000. Your Emergency Fund Ratio is 1.88&times; (₹60,000 / ₹32,000). If your income stops, your savings will decline by ₹32,000/month; after 1 month, savings are ₹28,000, and in month 2 they dip below ₹10,000. Thus, your <strong>Safety Runway is ~1.5 months</strong>, placing you in a <strong>High Risk</strong> profile.
+          </p>
+        </div>
       </div>
-      <p class="fs13 c2 mb12" style="max-width:640px">Select any saved scenarios below, or leave none selected to run a <strong>baseline-only</strong> forecast.</p>
-      <div id="sim-scenarios-list" class="scenario-list mb24"></div>
-      <button class="btn btn-green" style="font-size:.9rem;padding:14px 32px" onclick="runSimulation()">🔮 Run simulation</button>
-    </div>
 
-    <div class="page-view" id="page-history">
-      <div class="page-header">
-        <h1 class="page-title">Simulation History</h1>
-        <p class="page-sub">Recent simulation runs. Click a row to reload results on the dashboard.</p>
+      <div class="card mb16">
+        <div class="card-title">🔍 Platform Scope &amp; Boundaries</div>
+        <p class="fs14 c2 mb16">Know what you can and cannot do inside the Money Mirror application.</p>
+        <div class="grid2">
+          <div class="card" style="border-left: 4px solid var(--green)">
+            <div class="fw600 fs14 green mb12">✔️ What you CAN do:</div>
+            <ul class="fs13 c2" style="list-style-position: inside; line-height: 1.8">
+              <li>Register an account securely.</li>
+              <li>Input income, EMIs, rent, expenses, and savings.</li>
+              <li>Plan active goals with custom target dates and amounts.</li>
+              <li>Test stress models using Conservative, Moderate, or Aggressive growth settings.</li>
+              <li>Examine metrics and save results to simulation history.</li>
+            </ul>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--red)">
+            <div class="fw600 fs14 red mb12">❌ What you CANNOT do:</div>
+            <ul class="fs13 c2" style="list-style-position: inside; line-height: 1.8">
+              <li>Sync bank statements, credit card profiles, or read SMS.</li>
+              <li>Receive automated, regulatory financial/investment advice.</li>
+              <li>Run massive multi-tenant production scaling.</li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div id="history-list" class="flex fgap8" style="flex-direction:column"></div>
+
+      <div class="card">
+        <div class="card-title">🛡️ Disclaimers &amp; Privacy</div>
+        <p class="fs13 c2 mb12" style="line-height: 1.6"><strong>Disclaimer:</strong> Money Mirror is purely an educational planning tool. All calculations are modeled on hypothetical user inputs, predefined simulation rates, and basic arithmetic. We do not integrate with live market feeds, and nothing on this site guarantees future returns or replaces certified professional financial advice.</p>
+        <p class="fs13 c2" style="line-height: 1.6"><strong>Privacy Note:</strong> We value your privacy. Everything you enter is securely stored under your authenticated account for simulation purposes. We do not track, share, or sell your data. No automated crawlers read your details.</p>
+      </div>
     </div>
 
   </div>
+  <footer class="app-footer">
+    <p>&copy; 2026 Money Mirror. All simulations are educational projections. We do not pull live bank data or SMS. Read our full disclaimers on the <a href="#" onclick="showPage('about'); return false;">About &amp; Help</a> page.</p>
+  </footer>
 </div>
 
 <div class="spin-overlay hidden" id="spinner">
@@ -501,21 +807,21 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
 </div>
 
 <script>
-
 const API = '';
 
 let token = localStorage.getItem('mm_token') || null;
 let user  = JSON.parse(localStorage.getItem('mm_user') || 'null');
 let emiCount = 0;
 let savedScenarios = [];
+let savedGoals = [];
 let editingScenarioId = null;
+let editingGoalId = null;
 let charts = {};
 let lastResult = null;
 let apiBusy = false;
 
-function openAuth() {
-  show('auth-modal');
-}
+// UI Actions
+function openAuth() { show('auth-modal'); }
 function switchAuthTab(tab) {
   toggle('auth-login-form', tab === 'login');
   toggle('auth-reg-form',   tab === 'register');
@@ -524,6 +830,15 @@ function switchAuthTab(tab) {
 }
 document.getElementById('auth-modal').addEventListener('click', e => {
   if (e.target === document.getElementById('auth-modal')) hide('auth-modal');
+});
+
+// Dropdown
+function toggleProfileDropdown(e) {
+  e.stopPropagation();
+  document.getElementById('profile-dropdown').classList.toggle('hidden');
+}
+document.addEventListener('click', () => {
+  document.getElementById('profile-dropdown')?.classList.add('hidden');
 });
 
 async function doLogin() {
@@ -544,32 +859,31 @@ async function doLogin() {
   } catch(e) { showAuthError('login', e.message); }
   finally { hideSpinner(); }
 }
+
 async function doRegister() {
   const name = val('reg-name'), email = val('reg-email'), pw = val('reg-password');
-
   if (!name.trim())  return showAuthError('reg', 'Please enter your name.');
   if (!email.trim()) return showAuthError('reg', 'Please enter your email.');
   if (!pw)           return showAuthError('reg', 'Please enter a password.');
 
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
-    return showAuthError('reg', 'Please enter a valid email address (e.g. you@gmail.com).');
+    return showAuthError('reg', 'Please enter a valid email address.');
 
   if (pw.length < 6)
     return showAuthError('reg', 'Password must be at least 6 characters.');
   if (!/[A-Za-z]/.test(pw))
-    return showAuthError('reg', 'Password must contain at least one letter (e.g. Yamuna@11).');
+    return showAuthError('reg', 'Password must contain at least one letter.');
   if (!/[0-9]/.test(pw))
-    return showAuthError('reg', 'Password must contain at least one number (e.g. Yamuna@11).');
+    return showAuthError('reg', 'Password must contain at least one number.');
 
-  showSpinner('Creating your account...');
+  showSpinner('Creating account...');
   try {
     const res = await api('POST', '/api/auth/register', { name, email, password: pw }, false);
     onAuthSuccess(res);
-  } catch(e) {
-    showAuthError('reg', e.message);
-  }
+  } catch(e) { showAuthError('reg', e.message); }
   finally { hideSpinner(); }
 }
+
 function onAuthSuccess(data) {
   token = data.access_token;
   user  = { name: data.user_name, email: data.user_email };
@@ -580,11 +894,13 @@ function onAuthSuccess(data) {
   show('page-app');
   initApp();
 }
+
 function showAuthError(form, msg) {
   const el = document.getElementById(form === 'login' ? 'login-error' : 'reg-error');
   el.textContent = msg; el.classList.remove('hidden');
   setTimeout(() => el.classList.add('hidden'), 6000);
 }
+
 function doLogout() {
   localStorage.removeItem('mm_token'); localStorage.removeItem('mm_user');
   try { sessionStorage.removeItem('mm_last_sim'); } catch (e) {}
@@ -600,7 +916,7 @@ async function api(method, path, body = null, auth = true) {
   const opts = { method, headers };
   if (body) opts.body = JSON.stringify(body);
   const res = await fetch(API + path, opts);
-  if (res.status === 401) { doLogout(); throw new Error('Session expired. Please sign in again.'); }
+  if (res.status === 401) { doLogout(); throw new Error('Session expired. Please sign in.'); }
   const data = await res.json();
   if (!res.ok) {
     let detail = data.detail || 'API error';
@@ -616,17 +932,41 @@ async function initApp() {
     document.getElementById('user-name-display').textContent = user.name;
     document.getElementById('user-avatar').textContent = user.name[0].toUpperCase();
   }
-  try { await loadProfile(); } catch(e) {}
+  
+  let hasProfile = false;
+  try {
+    const p = await loadProfile();
+    if (p && p.income > 0) hasProfile = true;
+  } catch(e) {}
+  
   try { await loadScenarios(); } catch(e) {}
-  try { await loadHistory(); } catch(e) {}
+  try { await loadGoals(); } catch(e) {}
+  
+  let runs = [];
+  try {
+    const data = await api('GET', '/api/simulations');
+    runs = Array.isArray(data) ? data : (data.items || []);
+  } catch(e) {}
+
+  // Check last sim run
   try {
     const raw = sessionStorage.getItem('mm_last_sim');
-    if (raw && !lastResult) {
+    if (raw) {
       lastResult = JSON.parse(raw);
-      if (lastResult && lastResult.baseline && lastResult.baseline.balances)
-        renderDashboard(lastResult);
+    } else if (runs.length > 0) {
+      showSpinner('Loading latest forecast...');
+      const latestRun = await api('GET', `/api/simulations/${runs[0].id}`);
+      lastResult = latestRun;
+      sessionStorage.setItem('mm_last_sim', JSON.stringify(latestRun));
+      hideSpinner();
     }
   } catch (e) {}
+
+  if (lastResult) {
+    renderDashboard(lastResult);
+  } else {
+    renderEmptyMockState(hasProfile, savedGoals.length > 0);
+  }
 }
 
 if (token && user) {
@@ -638,29 +978,49 @@ function toggleMobileNav() {
   document.getElementById('topbar-nav-wrap')?.classList.toggle('mobile-open');
 }
 
-async function showPage(name) {
-  if (name === 'scenarios') {
-    try {
-      const p = await api('GET', '/api/profile');
-      if (!p || !p.income) {
-        toast('Set your monthly income on My Profile first.');
-        name = 'profile';
-      }
-    } catch (e) {
-      name = 'profile';
-    }
+function updateProfileSettingsLocally() {
+  const selectH = document.getElementById('sim-horizon')?.value;
+  if (selectH) {
+    const profH = document.getElementById('p-horizon');
+    if (profH) profH.value = selectH;
   }
+}
+
+async function showPage(name) {
   document.querySelectorAll('.page-view').forEach(p => p.classList.remove('on'));
   document.querySelectorAll('.tnav').forEach(n => n.classList.remove('on'));
   document.getElementById('page-' + name)?.classList.add('on');
   document.getElementById('nav-' + name)?.classList.add('on');
   document.getElementById('topbar-nav-wrap')?.classList.remove('mobile-open');
-  if (name === 'simulate')  renderSimulateScenarios();
-  if (name === 'scenarios') renderSavedScenarios();
-  if (name === 'history')   loadHistory();
+  
+  if (name === 'dashboard') {
+    if (lastResult) renderDashboard(lastResult);
+    else {
+      let hp = false;
+      try { const p = await api('GET', '/api/profile'); if (p && p.income) hp = true; } catch(e) {}
+      renderEmptyMockState(hp, savedGoals.length > 0);
+    }
+  }
+  if (name === 'simulations') {
+    await loadScenarios();
+    renderSimulateScenarios();
+  }
+  if (name === 'goals') {
+    await loadGoals();
+  }
+  if (name === 'insights') {
+    renderInsights();
+  }
+  if (name === 'history') {
+    await loadHistory();
+  }
+  if (name === 'settings') {
+    await loadProfile();
+  }
   window.scrollTo(0, 0);
 }
 
+// PROFILE SETUP
 async function loadProfile() {
   const p = await api('GET', '/api/profile');
   setv('p-income', p.income || '');
@@ -677,15 +1037,19 @@ async function loadProfile() {
   setv('p-dining', p.dining || '');
   setv('p-shopping', p.shopping || '');
   setv('p-misc', p.misc || '');
-  document.getElementById('p-horizon').value = p.horizon_months || 12;
+  setv('p-horizon', p.horizon_months || 12);
+  
+  const simH = document.getElementById('sim-horizon');
+  if (simH) simH.value = p.horizon_months || 12;
+
   document.getElementById('emi-list').innerHTML = '';
   emiCount = 0;
   (p.emis || []).forEach(e => addEMIRow(e.name, e.amount));
+  return p;
 }
 
 function readProfile() {
   const gv = id => parseFloat(document.getElementById(id)?.value) || 0;
-  const gvs = id => document.getElementById(id)?.value || '';
   const emis = [];
   document.querySelectorAll('.emi-row-item').forEach(row => {
     const name = row.querySelector('.emi-name')?.value || '';
@@ -709,12 +1073,13 @@ async function saveProfile(thenSimulate = false) {
   const p = readProfile();
   if (!p.income) return toast('Please enter your income first.');
   apiBusy = true;
-  showSpinner(thenSimulate ? 'Saving and running baseline…' : 'Saving profile…');
+  showSpinner(thenSimulate ? 'Saving and running twin forecast…' : 'Saving profile…');
   try {
     await api('PUT', '/api/profile', p);
-    toast('Profile saved ✓');
+    toast('Settings saved ✓');
     if (thenSimulate) {
-      const result = await api('POST', '/api/simulate', { scenario_ids: [] });
+      const mode = document.getElementById('sim-mode')?.value || 'moderate';
+      const result = await api('POST', '/api/simulate', { scenario_ids: [], simulation_mode: mode });
       lastResult = result;
       try { sessionStorage.setItem('mm_last_sim', JSON.stringify(result)); } catch (e) {}
       renderDashboard(result);
@@ -724,77 +1089,73 @@ async function saveProfile(thenSimulate = false) {
   } catch (e) { toast('Error: ' + e.message); }
   finally { apiBusy = false; hideSpinner(); }
 }
+
+function addEMIRow(name = '', amount = '') {
   emiCount++;
   const id = emiCount;
   const div = document.createElement('div');
   div.className = 'emi-row emi-row-item';
   div.id = 'emi-' + id;
   div.innerHTML = `
-    <input class="finput emi-name" type="text" placeholder="e.g. Bike loan" value="${name}"/>
+    <input class="finput emi-name" type="text" placeholder="e.g. Laptop loan" value="${name}"/>
     <input class="finput emi-amt" type="number" placeholder="₹/month" value="${amount}" min="0"/>
     <button class="emi-rm" onclick="document.getElementById('emi-${id}').remove()">✕</button>`;
   document.getElementById('emi-list').appendChild(div);
 }
 
-async function quickAddTemplate(templateId) {
-  try {
-    const templates = await api('GET', '/api/scenarios/templates');
-    const t = templates.find(x => x.id === templateId);
-    if (!t) return toast('Template not found.');
-    await api('POST', '/api/scenarios', { name: t.name, scenario_type: t.id, params: t.default_params || {} });
-    toast('Scenario added — check the list below ✓');
-    await loadScenarios();
-  } catch (e) { toast('Error: ' + e.message); }
-}
-
+// SCENARIOS
 async function loadScenarios() {
   savedScenarios = await api('GET', '/api/scenarios');
   renderSavedScenarios();
   renderSimulateScenarios();
 }
+
 function renderSavedScenarios() {
   const el = document.getElementById('scenarios-list-content');
   if (!el) return;
   if (!savedScenarios.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">💡</div><div class="empty-text">No saved scenarios yet.<br/>Create your first what-if scenario to start testing.</div></div>`;
+    el.innerHTML = `<div class="empty"><div class="empty-icon">💡</div><div class="empty-text">No active scenarios.<br/>Quick-add a template or create a custom stress scenario.</div></div>`;
     return;
   }
   const ICONS = {'salary-cut':'📉','job-loss':'💼','new-emi':'🏍️','rent-hike':'🏠','lifestyle-up':'✨','medical':'🏥'};
   el.innerHTML = savedScenarios.map(s => `
     <div class="saved-item mb8">
       <div class="si-icon">${ICONS[s.scenario_type]||'📊'}</div>
-      <div>
+      <div style="min-width:0; flex:1">
         <div class="si-name">${s.name}</div>
         <div class="si-meta">${formatScenarioType(s.scenario_type)} · ${formatParams(s.scenario_type, s.params)}</div>
       </div>
       <div class="si-actions">
-        <button class="btn btn-ghost btn-sm" onclick="editScenario(${s.id})">Edit</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteScenario(${s.id})">Delete</button>
+        <button class="btn btn-ghost btn-sm" style="padding:5px 10px" onclick="editScenario(${s.id})">Edit</button>
+        <button class="btn btn-danger btn-sm" style="padding:5px 10px" onclick="deleteScenario(${s.id})">✕</button>
       </div>
     </div>`).join('');
 }
+
 function renderSimulateScenarios() {
   const el = document.getElementById('sim-scenarios-list');
   if (!el) return;
   if (!savedScenarios.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">💡</div><div class="empty-text">No saved scenarios yet.<br/>You can still run a <strong>baseline-only</strong> simulation with the button below, or <a href="#" onclick="showPage('scenarios');return false;" style="color:var(--violet)">add scenarios</a> to compare what-ifs.</div></div>`;
+    el.innerHTML = `<p class="fs12 c3">No scenarios created. Running will yield baseline only.</p>`;
     return;
   }
   const ICONS = {'salary-cut':'📉','job-loss':'💼','new-emi':'🏍️','rent-hike':'🏠','lifestyle-up':'✨','medical':'🏥'};
   el.innerHTML = savedScenarios.map(s => `
-    <div class="scard" id="sim-scard-${s.id}" onclick="toggleSimScenario(${s.id})">
+    <div class="scard ${selectedSimScenarios.has(s.id)?'selected':''}" id="sim-scard-${s.id}" onclick="toggleSimScenario(${s.id})">
       <div class="scard-icon">${ICONS[s.scenario_type]||'📊'}</div>
       <div class="scard-info">
         <div class="scard-name">${s.name}</div>
         <div class="scard-desc">${formatScenarioType(s.scenario_type)} · ${formatParams(s.scenario_type, s.params)}</div>
       </div>
-      <div class="scard-check" id="scard-check-${s.id}">✓</div>
+      <div class="scard-check" id="scard-check-${s.id}">${selectedSimScenarios.has(s.id)?'✓':''}</div>
     </div>`).join('');
 }
+
 let selectedSimScenarios = new Set();
 function toggleSimScenario(id) {
   const card = document.getElementById('sim-scard-' + id);
   const check = document.getElementById('scard-check-' + id);
+  if (!card) return;
   if (selectedSimScenarios.has(id)) {
     selectedSimScenarios.delete(id);
     card.classList.remove('selected');
@@ -804,6 +1165,17 @@ function toggleSimScenario(id) {
     card.classList.add('selected');
     check.textContent = '✓';
   }
+}
+
+async function quickAddTemplate(templateId) {
+  try {
+    const templates = await api('GET', '/api/scenarios/templates');
+    const t = templates.find(x => x.id === templateId);
+    if (!t) return toast('Template not found.');
+    await api('POST', '/api/scenarios', { name: t.name, scenario_type: t.id, params: t.default_params || {} });
+    toast('Scenario added ✓');
+    await loadScenarios();
+  } catch (e) { toast('Error: ' + e.message); }
 }
 
 function openNewScenario() {
@@ -833,6 +1205,7 @@ async function deleteScenario(id) {
   if (!confirm('Delete this scenario?')) return;
   await api('DELETE', `/api/scenarios/${id}`);
   toast('Scenario deleted');
+  selectedSimScenarios.delete(id);
   await loadScenarios();
 }
 async function saveScenario() {
@@ -923,7 +1296,6 @@ function readScenarioParams(type) {
   };
   return maps[type] || {};
 }
-
 function formatScenarioType(t) {
   return {'salary-cut':'Salary Cut','job-loss':'Job Loss','new-emi':'New EMI','rent-hike':'Rent Hike','lifestyle-up':'Lifestyle Upgrade','medical':'Medical Emergency'}[t] || t;
 }
@@ -941,51 +1313,225 @@ function formatParams(type, p) {
   return '';
 }
 
-function escapeHtml(s) {
-  const d = document.createElement('div');
-  d.textContent = s == null ? '' : String(s);
-  return d.innerHTML;
-}
-function formatExplText(t) {
-  if (!t) return '';
-  const esc = escapeHtml(t);
-  return esc.replace(/(₹[\d,]+)/g, '<strong>$1</strong>').replace(/(\d+\+?\s*mo(?:nths?)?)/gi, '<strong>$1</strong>');
-}
-function selectDashExpl(key) {
-  const o = window.__mmDashExpl || {};
-  const text = key === 'baseline' ? o.baseline : o[String(key)];
-  const el = document.getElementById('dash-expl-text');
-  if (el) el.innerHTML = formatExplText(text || '');
-  document.querySelectorAll('#dash-expl-chips [data-expl]').forEach(btn => {
-    const sel = (key === 'baseline' && btn.dataset.expl === 'baseline') || (String(key) === String(btn.dataset.expl));
-    btn.classList.toggle('btn-primary', sel);
-    btn.classList.toggle('btn-ghost', !sel);
-  });
+// GOALS
+async function loadGoals() {
+  try {
+    savedGoals = await api('GET', '/api/goals');
+    renderGoals();
+  } catch(e) {}
 }
 
+function renderGoals() {
+  const el = document.getElementById('goals-list-content');
+  if (!el) return;
+  if (!savedGoals.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">🎯</div><div class="empty-text">You have no goals yet. Add one like 'New laptop in 6 months'.</div><button class="btn btn-primary btn-sm mt12" onclick="openNewGoal()">Plan a goal</button></div>`;
+    return;
+  }
+  const CATEGORIES = {education:'🎓 Education', gadgets:'💻 Tech & Gadgets', travel:'✈️ Travel', vehicle:'🏍️ Vehicle', savings:'💰 General Savings'};
+  
+  el.innerHTML = savedGoals.map(g => {
+    // Check if we have active probabilities from last simulation result
+    let statusBadge = `<span class="tag tag-blue">Pending Run</span>`;
+    let detailText = `Target: ₹${Number(g.target_amount).toLocaleString('en-IN')} in ${g.target_months} mo`;
+    let progressPct = 0;
+
+    if (lastResult) {
+      // Find this goal in baseline result
+      const bg = (lastResult.baseline.goals || []).find(x => x.id === g.id);
+      if (bg) {
+        progressPct = Math.round(bg.probability * 100);
+        if (bg.status === 'achieved') {
+          statusBadge = `<span class="tag tag-green">✓ Achieved (Mo ${bg.achieved_month})</span>`;
+          detailText = `Maturing target fully funded by Month ${bg.achieved_month}`;
+        } else {
+          statusBadge = `<span class="tag tag-yellow">⚠️ ${progressPct}% Likelihood</span>`;
+          detailText = `Projected balance cover short of goal by ₹${Math.round(g.target_amount * (1 - bg.probability)).toLocaleString('en-IN')}`;
+        }
+      }
+    }
+
+    return `
+    <div class="goal-card">
+      <div class="goal-header">
+        <div>
+          <span class="goal-category">${CATEGORIES[g.category] || g.category}</span>
+          <div class="goal-title mt4">${g.name}</div>
+        </div>
+        ${statusBadge}
+      </div>
+      <div class="goal-stat">₹${Number(g.target_amount).toLocaleString('en-IN')}</div>
+      <div class="goal-meta">${detailText}</div>
+      <div class="prog mt12"><div class="prog-fill ${progressPct >= 100 ? 'pf-g' : progressPct >= 50 ? 'pf-y' : 'pf-r'}" style="width:${progressPct || 5}%"></div></div>
+      <div class="goal-actions">
+        <button class="btn btn-ghost btn-sm" style="padding:4px 8px; font-size:.65rem" onclick="editGoal(${g.id})">Edit</button>
+        <button class="btn btn-danger btn-sm" style="padding:4px 8px; font-size:.65rem" onclick="deleteGoal(${g.id})">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openNewGoal() {
+  editingGoalId = null;
+  document.getElementById('g-name').value = '';
+  document.getElementById('g-amount').value = '';
+  document.getElementById('g-timeline').value = 12;
+  document.getElementById('g-timeline-val').textContent = '12 months';
+  document.getElementById('g-category').value = 'education';
+  document.getElementById('goal-editor-title').textContent = 'New Goal';
+  show('goal-editor');
+  document.getElementById('goal-editor').scrollIntoView({ behavior:'smooth' });
+}
+
+function editGoal(id) {
+  const g = savedGoals.find(x => x.id === id);
+  if (!g) return;
+  editingGoalId = id;
+  document.getElementById('g-name').value = g.name;
+  document.getElementById('g-amount').value = g.target_amount;
+  document.getElementById('g-timeline').value = g.target_months;
+  document.getElementById('g-timeline-val').textContent = g.target_months + ' months';
+  document.getElementById('g-category').value = g.category;
+  document.getElementById('goal-editor-title').textContent = 'Edit Goal';
+  show('goal-editor');
+  document.getElementById('goal-editor').scrollIntoView({ behavior:'smooth' });
+}
+
+function closeGoalEditor() {
+  hide('goal-editor');
+  editingGoalId = null;
+}
+
+async function deleteGoal(id) {
+  if (!confirm('Remove this financial goal?')) return;
+  await api('DELETE', `/api/goals/${id}`);
+  toast('Goal removed');
+  await loadGoals();
+}
+
+async function saveGoal() {
+  const name = val('g-name'), amount = parseFloat(val('g-amount')), months = parseInt(val('g-timeline')), category = val('g-category');
+  if (!name.trim()) return toast('Please enter a goal name.');
+  if (!amount || amount <= 0) return toast('Please enter a valid target amount.');
+  try {
+    if (editingGoalId) {
+      await api('PUT', `/api/goals/${editingGoalId}`, { name, target_amount: amount, target_months: months, category });
+      toast('Goal updated ✓');
+    } else {
+      await api('POST', '/api/goals', { name, target_amount: amount, target_months: months, category });
+      toast('Goal saved ✓');
+    }
+    closeGoalEditor();
+    await loadGoals();
+  } catch(e) { toast('Error: ' + e.message); }
+}
+
+// SIMULATE SUBMIT
 async function runSimulation() {
   if (apiBusy) return;
   const scenarioIds = [...selectedSimScenarios];
-  apiBusy = true;
-  showSpinner('Running your financial simulation…');
+  const mode = document.getElementById('sim-mode')?.value || 'moderate';
+  const horizon = parseInt(document.getElementById('sim-horizon')?.value) || 12;
+
+  // Optimistic local update to database profile horizon first
   try {
-    const result = await api('POST', '/api/simulate', { scenario_ids: scenarioIds });
+    const activeProfile = readProfile();
+    activeProfile.horizon_months = horizon;
+    await api('PUT', '/api/profile', activeProfile);
+  } catch(e) {}
+
+  apiBusy = true;
+  showSpinner('Running financial twin simulation…');
+  try {
+    const result = await api('POST', '/api/simulate', { scenario_ids: scenarioIds, simulation_mode: mode });
     lastResult = result;
     try { sessionStorage.setItem('mm_last_sim', JSON.stringify(result)); } catch (e) {}
     renderDashboard(result);
     await showPage('dashboard');
-    toast('Simulation complete ✓');
+    toast('Simulation runs complete ✓');
   } catch(e) {
     toast('Error: ' + e.message);
-    if (e.message.includes('profile')) await showPage('profile');
+    if (e.message.includes('profile')) await showPage('settings');
   } finally { apiBusy = false; hideSpinner(); }
 }
 
-const C = {
-  baseline: '#1fd89e', 'salary-cut': '#f0c040', 'job-loss': '#f05858',
-  'new-emi': '#5b9cf6', 'rent-hike': '#f0a060', 'lifestyle-up': '#c084fc', 'medical': '#f472b6'
-};
+// INSIGHTS VIEW
+function renderInsights() {
+  const el = document.getElementById('insights-content');
+  if (!el) return;
+  if (!lastResult) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">💡</div><div class="empty-text">Run a simulation to see your personalised suggestions.</div></div>`;
+    return;
+  }
+  
+  let html = `<div class="card mb16">
+    <div class="card-title">Core Observations</div>
+    <div class="insight-text">${(lastResult.insights || []).map(l => `<div>• ${l}</div>`).join('<br/>')}</div>
+  </div>`;
 
+  const b = lastResult.baseline;
+  const bm = b.metrics;
+  const target = bm.safety_target || 6;
+  const ef = bm.emergency_fund_ratio;
+
+  html += `<div class="advice-grid mt16">`;
+
+  // Rule-based warning cards
+  if (bm.dti > 0.40) {
+    html += `<div class="adv bad">
+      <div class="adv-icon">🚨</div>
+      <div class="adv-title">High Debt Obligations</div>
+      <div class="adv-desc">EMIs consume ${(bm.dti * 100).toFixed(0)}% of your take-home. Avoid new subscriptions or buy-now-pay-later models. Focus on clearing the smallest EMI balance.</div>
+    </div>`;
+  } else {
+    html += `<div class="adv good">
+      <div class="adv-icon">🛡️</div>
+      <div class="adv-title">Safe Debt Margin</div>
+      <div class="adv-desc">Your debt-to-income ratio is in a comfortable range (${(bm.dti * 100).toFixed(0)}%). You have space for flexible cash flow planning.</div>
+    </div>`;
+  }
+
+  if (ef < 3.0) {
+    html += `<div class="adv bad">
+      <div class="adv-icon">🏥</div>
+      <div class="adv-title">Low Liquidity Buffer</div>
+      <div class="adv-desc">Your emergency savings stand at ${ef.toFixed(1)} months of expenses. Aim to accumulate at least 3 months to avoid debt triggers in case of job losses or emergencies.</div>
+    </div>`;
+  } else if (ef < target) {
+    html += `<div class="adv warn">
+      <div class="adv-icon">⚠️</div>
+      <div class="adv-title">Approaching Safety Target</div>
+      <div class="adv-desc">Your buffer is ${ef.toFixed(1)} months. Solid progress, but you are short of your custom target of ${target} months. Keep depositing extra surplus.</div>
+    </div>`;
+  } else {
+    html += `<div class="adv good">
+      <div class="adv-icon">👑</div>
+      <div class="adv-title">Excellent Savings Shield</div>
+      <div class="adv-desc">Your emergency reserves cover ${ef.toFixed(1)} months of expenses, fully meeting your safety target. Consider investing extra surplus in mutual funds or SIPs.</div>
+    </div>`;
+  }
+
+  // Discretionary spending alert
+  const variableRatio = (lastResult.profile.variable / lastResult.profile.income);
+  if (variableRatio > 0.35) {
+    html += `<div class="adv warn">
+      <div class="adv-icon">🛍️</div>
+      <div class="adv-title">Discretionary Spend Leakage</div>
+      <div class="adv-desc">Lifestyle variable costs take ${(variableRatio*100).toFixed(0)}% of your monthly cash flow. Try to curb dining out and shopping to support your planned goals.</div>
+    </div>`;
+  } else {
+    html += `<div class="adv good">
+      <div class="adv-icon">📊</div>
+      <div class="adv-title">Disciplined Spending</div>
+      <div class="adv-desc">Variable costs are locked under 35%. You maintain a healthy cash flow balance to grow wealth.</div>
+    </div>`;
+  }
+
+  html += `</div>`;
+  el.innerHTML = html;
+}
+
+// DASHBOARD RENDER
 function renderDashboard(r) {
   const el = document.getElementById('dashboard-content');
   if (!el) return;
@@ -1006,29 +1552,67 @@ function renderDashboard(r) {
   const dtiPfill = bm.dti > .5 ? 'pf-r' : bm.dti > .35 ? 'pf-y' : 'pf-g';
   const efPfill = bm.emergency_fund_ratio >= 3 ? 'pf-g' : bm.emergency_fund_ratio >= 1 ? 'pf-y' : 'pf-r';
 
+  // Goals completion count
+  const activeG = b.goals || [];
+  const achievedCount = activeG.filter(x => x.status === 'achieved').length;
+  const goalsProgressLabel = activeG.length ? `${achievedCount} / ${activeG.length} met` : 'No goals';
+  const goalsPfill = activeG.length ? (achievedCount === activeG.length ? 'pf-g' : 'pf-y') : 'pf-b';
+  const goalsPct = activeG.length ? (achievedCount / activeG.length * 100) : 100;
+
+  // Savings rate
+  const monthlyCashflow = bm.monthly_cashflow;
+  const savingsRate = r.profile.income > 0 ? (monthlyCashflow / r.profile.income) : 0;
+  const savingsRateLabel = pct(savingsRate);
+  const savingsPfill = savingsRate >= 0.20 ? 'pf-g' : savingsRate >= 0.05 ? 'pf-y' : 'pf-r';
+  const savingsPct = Math.max(0, Math.min(100, savingsRate * 200)); // scale for visibility
+
   let html = `<div class="grid4 mb16">
     <div class="mcard" style="--mc-accent:${runwayC}">
-      <div class="mc-lbl">Safety Runway</div>
+      <div class="flex fac mb8" style="justify-content:space-between">
+        <div class="mc-lbl" style="margin-bottom:0">Safety Runway</div>
+        <div class="tooltip" tabindex="0">
+          <span class="tooltip-icon">i</span>
+          <span class="tooltip-text">How long your savings last. High risk if under 2 months, comfortable if 6+ months.</span>
+        </div>
+      </div>
       <div class="mc-val" style="color:${runwayC}">${bm.runway >= horizon ? horizon + '+' : bm.runway}<span style="font-size:1rem;color:var(--text2)"> mo</span></div>
-      <div class="mc-sub">Months before hitting min balance</div>
+      <div class="mc-sub">How many months your savings can last if your income stops.</div>
       <div class="prog mt8"><div class="prog-fill ${runwayPfill}" style="width:${runwayPct}%"></div></div>
     </div>
     <div class="mcard" style="--mc-accent:${riskColors[bm.risk_level]}">
-      <div class="mc-lbl">Risk Level</div>
-      <div class="mc-val" style="font-size:1rem;line-height:1.4;margin-top:4px"><span class="tag ${riskTags[bm.risk_level]}">${riskLabel[bm.risk_level]}</span></div>
-      <div class="mc-sub mt8">Based on runway, DTI, and emergency fund</div>
+      <div class="flex fac mb8" style="justify-content:space-between">
+        <div class="mc-lbl" style="margin-bottom:0">Overall Risk</div>
+        <div class="tooltip" tabindex="0">
+          <span class="tooltip-icon">i</span>
+          <span class="tooltip-text">Aggregated safety score based on debt load, runway length, and liquid reserves.</span>
+        </div>
+      </div>
+      <div class="mc-val" style="font-size:1.1rem;line-height:1.4;margin-top:6px"><span class="tag ${riskTags[bm.risk_level]}">${riskLabel[bm.risk_level]}</span></div>
+      <div class="mc-sub mt12">Is your current situation safe, okay, or risky?</div>
     </div>
-    <div class="mcard" style="--mc-accent:${bm.dti > .5 ? 'var(--red)' : bm.dti > .35 ? 'var(--yellow)' : 'var(--green)'}">
-      <div class="mc-lbl">Debt-to-Income Ratio</div>
-      <div class="mc-val" style="color:${bm.dti > .5 ? 'var(--red)' : bm.dti > .35 ? 'var(--yellow)' : 'var(--green)'}">${pct(bm.dti)}</div>
-      <div class="mc-sub">Of income going to EMIs${bm.dti > .5 ? ' — above safe limit' : ''}</div>
-      <div class="prog mt8"><div class="prog-fill ${dtiPfill}" style="width:${Math.min(100,bm.dti*150)}%"></div></div>
+    <div class="mcard" style="--mc-accent:var(--blue)">
+      <div class="flex fac mb8" style="justify-content:space-between">
+        <div class="mc-lbl" style="margin-bottom:0">Monthly Surplus Rate</div>
+        <div class="tooltip" tabindex="0">
+          <span class="tooltip-icon">i</span>
+          <span class="tooltip-text">Calculated as (Income - Expenses) / Income. Aim for &gt;20% to build wealth. Current surplus: ₹${monthlyCashflow.toLocaleString('en-IN')}/mo.</span>
+        </div>
+      </div>
+      <div class="mc-val" style="color:var(--blue)">${savingsRateLabel}</div>
+      <div class="mc-sub">How much money is left after expenses every month.</div>
+      <div class="prog mt8"><div class="prog-fill ${savingsPfill}" style="width:${savingsPct}%"></div></div>
     </div>
-    <div class="mcard" style="--mc-accent:${bm.emergency_fund_ratio >= 3 ? 'var(--green)' : bm.emergency_fund_ratio >= 1 ? 'var(--yellow)' : 'var(--red)'}">
-      <div class="mc-lbl">Emergency Fund</div>
-      <div class="mc-val" style="color:${bm.emergency_fund_ratio >= 3 ? 'var(--green)' : bm.emergency_fund_ratio >= 1 ? 'var(--yellow)' : 'var(--red)'}">${bm.emergency_fund_ratio.toFixed(1)}×</div>
-      <div class="mc-sub">Months of expenses in savings vs target</div>
-      <div class="prog mt8"><div class="prog-fill ${efPfill}" style="width:${Math.min(100,bm.emergency_fund_ratio/Math.max(target,0.1)*100)}%"></div></div>
+    <div class="mcard" style="--mc-accent:var(--violet)">
+      <div class="flex fac mb8" style="justify-content:space-between">
+        <div class="mc-lbl" style="margin-bottom:0">Milestone Goals</div>
+        <div class="tooltip" tabindex="0">
+          <span class="tooltip-icon">i</span>
+          <span class="tooltip-text">How many planned goals (like buying a laptop or travel) are fully funded by your projected savings.</span>
+        </div>
+      </div>
+      <div class="mc-val" style="color:var(--violet)">${goalsProgressLabel}</div>
+      <div class="mc-sub">How many of your goals the simulation thinks you can afford.</div>
+      <div class="prog mt8"><div class="prog-fill ${goalsPfill}" style="width:${goalsPct}%"></div></div>
     </div>
   </div>`;
 
@@ -1036,10 +1620,11 @@ function renderDashboard(r) {
   const explMap = { baseline: baselineExpl };
   (r.scenarios || []).forEach(s => { explMap[String(s.id)] = s.explanation || ''; });
   window.__mmDashExpl = explMap;
+
   html += `<div class="insight mb16" id="dash-explanation-wrap">
-    <div class="insight-label">Scenario insight</div>
+    <div class="insight-label">Simulation insights explanation</div>
     <div class="flex fgap8 mb12" style="flex-wrap:wrap" id="dash-expl-chips">` +
-    `<button type="button" class="btn btn-sm btn-primary" data-expl="baseline" onclick="selectDashExpl('baseline')">Baseline</button>` +
+    `<button type="button" class="btn btn-sm btn-primary" data-expl="baseline" onclick="selectDashExpl('baseline')">Baseline Forecast</button>` +
     (r.scenarios || []).map(s =>
       `<button type="button" class="btn btn-sm btn-ghost" data-expl="${s.id}" onclick="selectDashExpl(${s.id})">${escapeHtml(s.name)}</button>`
     ).join('') +
@@ -1061,81 +1646,97 @@ function renderDashboard(r) {
       <div class="tb-fill ${current >= target ? 'pf-g' : current >= target * .7 ? 'pf-y' : 'pf-r'}" style="width:${currentPct}%"></div>
       <div class="tb-target-line" style="left:${targetPct}%"></div>
     </div>
-    <div class="tb-labels"><span>0</span><span>You are here: ${current.toFixed(1)} months</span><span>Target: ${target} months</span></div>
-  </div>`;
-
-  html += `<div class="insight mb16">
-    <div class="insight-label">Your personalised insights</div>
-    <div class="insight-text">${(r.insights || []).map((l,i) => (i?'<br/><br/>':'') + l.replace(/(₹[\d,]+)/g,'<strong>$1</strong>').replace(/(\d+ months?)/g,'<strong>$1</strong>')).join('')}</div>
+    <div class="tb-labels"><span>0</span><span>Current status: ${current.toFixed(1)} months</span><span>Target: ${target} months</span></div>
   </div>`;
 
   const legend = `<div class="cl-item"><div class="cl-dot" style="background:${C.baseline}"></div>Baseline</div>` +
     (r.scenarios || []).map(s => `<div class="cl-item"><div class="cl-dot" style="background:${C[s.scenario_type]||'#888'}"></div>${s.name}</div>`).join('');
 
   html += `<div class="chart-card mb16">
-    <div class="chart-header"><div class="chart-title">Balance over time</div><div class="chart-legend">${legend}</div></div>
+    <div class="chart-header"><div class="chart-title">Projected balance over time</div><div class="chart-legend">${legend}</div></div>
     <div class="chart-wrap"><canvas id="c-balance"></canvas></div>
   </div>`;
 
   if (r.scenarios && r.scenarios.length) {
     html += `<div class="card mb16">
-      <div class="card-title">Scenario Comparison</div>
+      <div class="card-title">Side-by-side comparative matrix</div>
       <div class="comp-wrap">
       <table class="comp-table">
-        <thead><tr><th>Plan</th><th>Safety Runway</th><th>Risk</th><th>DTI</th><th>First Risk Month</th><th>Monthly Cashflow</th></tr></thead>
+        <thead><tr><th>Scenario Plan</th><th>Runway</th><th>Risk Level</th><th>Goal Achieved</th><th>Min Balance Month</th><th>Final Balance</th></tr></thead>
         <tbody>
           <tr style="background:var(--gd)">
-            <td class="col-name">Baseline (current plan) <span class="best-badge">SAFEST</span></td>
+            <td class="col-name">Baseline (Current plan) <span class="best-badge">Baseline</span></td>
             <td style="color:var(--green);font-weight:600">${bm.runway >= horizon ? horizon + '+ mo' : bm.runway + ' mo'}</td>
             <td><span class="tag ${riskTags[bm.risk_level]}">${riskLabel[bm.risk_level]}</span></td>
-            <td style="color:${bm.dti>.5?'var(--red)':bm.dti>.35?'var(--yellow)':'var(--green)'}">${pct(bm.dti)}</td>
+            <td>${activeG.filter(x => x.status === 'achieved').length} / ${activeG.length}</td>
             <td>${bm.first_risk_month ? 'Month ' + bm.first_risk_month : '—'}</td>
-            <td style="color:${bm.monthly_cashflow>=0?'var(--green)':'var(--red)'};font-weight:600">${fmt(bm.monthly_cashflow)}/mo</td>
+            <td style="color:var(--green);font-weight:600">${fmt(b.balances[b.balances.length - 1])}</td>
           </tr>`;
 
     (r.scenarios || []).forEach(s => {
       const sm = s.metrics;
       const isBest = s.id === r.best_scenario_id;
       const isWorst = s.id === r.worst_scenario_id && r.scenarios.length > 1;
+      const finalBal = s.balances[s.balances.length - 1];
       html += `<tr>
         <td class="col-name">${s.name}${isBest?'<span class="best-badge">SAFEST</span>':''}${isWorst?'<span class="rb-worst">RISKIEST</span>':''}</td>
         <td style="color:${sm.runway < bm.runway ? 'var(--red)':'var(--green)'};font-weight:600">${sm.runway >= horizon ? horizon + '+ mo' : sm.runway + ' mo'}</td>
         <td><span class="tag ${riskTags[sm.risk_level]}">${riskLabel[sm.risk_level]}</span></td>
-        <td style="color:${sm.dti>.5?'var(--red)':sm.dti>.35?'var(--yellow)':'var(--green)'}">${pct(sm.dti)}</td>
+        <td>${(s.goals || []).filter(x => x.status === 'achieved').length} / ${activeG.length}</td>
         <td>${sm.first_risk_month ? '<span style="color:var(--red)">Month ' + sm.first_risk_month + '</span>' : '—'}</td>
-        <td style="color:${sm.monthly_cashflow>=0?'var(--green)':'var(--red)'}">${fmt(sm.monthly_cashflow)}/mo</td>
+        <td style="color:${finalBal>=bm.min_balance?'var(--green)':'var(--red)'}">${fmt(finalBal)}</td>
       </tr>`;
     });
     html += `</tbody></table></div></div>`;
   }
 
-  if (r.advice && r.advice.length) {
-    html += `<div class="card-title mt16 mb12">💡 Personalised Advice</div><div class="advice-grid mb24">`;
-    r.advice.forEach(a => {
-      html += `<div class="adv ${a.type}"><div class="adv-icon">${a.icon}</div><div class="adv-title">${a.title}</div><div class="adv-desc">${a.desc}</div></div>`;
-    });
-    html += `</div>`;
-  }
-
   html += `<div class="flex fgap12 mt24">
-    <button class="btn btn-primary" onclick="showPage('simulate')">🔄 Run new simulation</button>
-    <button class="btn btn-ghost" onclick="showPage('scenarios')">Manage scenarios</button>
+    <button class="btn btn-primary" onclick="showPage('simulations')">🔮 Test a what-if scenario</button>
+    <button class="btn btn-ghost" onclick="showPage('settings')">Update Profile</button>
   </div>`;
 
   el.innerHTML = html;
   requestAnimationFrame(() => drawCharts(r));
 }
 
+// DASHBOARD EXPL SWITCHER
+function selectDashExpl(key) {
+  const o = window.__mmDashExpl || {};
+  const text = key === 'baseline' ? o.baseline : o[String(key)];
+  const el = document.getElementById('dash-expl-text');
+  if (el) el.innerHTML = formatExplText(text || '');
+  document.querySelectorAll('#dash-expl-chips [data-expl]').forEach(btn => {
+    const sel = (key === 'baseline' && btn.dataset.expl === 'baseline') || (String(key) === String(btn.dataset.expl));
+    btn.classList.toggle('btn-primary', sel);
+    btn.classList.toggle('btn-ghost', !sel);
+  });
+}
+
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s == null ? '' : String(s);
+  return d.innerHTML;
+}
+function formatExplText(t) {
+  if (!t) return '';
+  const esc = escapeHtml(t);
+  return esc.replace(/(₹[\d,]+)/g, '<strong>$1</strong>').replace(/(\d+\+?\s*mo(?:nths?)?)/gi, '<strong>$1</strong>');
+}
+
+// CHARTS DATA
+const C = {
+  baseline: '#12e3a0', 'salary-cut': '#f3c63f', 'job-loss': '#f85e5e',
+  'new-emi': '#4fa2ff', 'rent-hike': '#f0a060', 'lifestyle-up': '#a855f7', 'medical': '#ec4899'
+};
+
 function drawCharts(r) {
   destroyCharts();
   const b = r.baseline;
-  const horizon = r.labels.length - 1;
-
   const bCtx = document.getElementById('c-balance');
   if (bCtx) {
     const datasets = [{
-      label: 'Baseline', data: b.balances,
-      borderColor: C.baseline, backgroundColor: 'rgba(31,216,158,.06)',
+      label: 'Baseline Forecast', data: b.balances,
+      borderColor: C.baseline, backgroundColor: 'rgba(18,227,160,.06)',
       fill: true, tension: .4, borderWidth: 2.5, pointRadius: 2
     }];
     (r.scenarios || []).forEach(s => {
@@ -1153,14 +1754,14 @@ function drawCharts(r) {
         interaction: { mode: 'index', intersect: false },
         plugins: {
           legend: { display: false },
-          tooltip: { backgroundColor: '#1d2133', borderColor: 'rgba(255,255,255,.08)', borderWidth: 1,
-            titleColor: '#eef0f8', bodyColor: '#7a84a0',
+          tooltip: { backgroundColor: '#131624', borderColor: 'rgba(255,255,255,.08)', borderWidth: 1,
+            titleColor: '#f1f3f9', bodyColor: '#8a94b5',
             callbacks: { label: ctx => `  ${ctx.dataset.label}: ₹${Math.round(ctx.raw).toLocaleString('en-IN')}` }
           }
         },
         scales: {
-          x: { grid: { color: 'rgba(255,255,255,.03)' }, ticks: { color: '#454d66', font: { size: 10 } } },
-          y: { grid: { color: 'rgba(255,255,255,.03)' }, ticks: { color: '#454d66', font: { size: 10 },
+          x: { grid: { color: 'rgba(255,255,255,.02)' }, ticks: { color: '#4e5670', font: { size: 10 } } },
+          y: { grid: { color: 'rgba(255,255,255,.02)' }, ticks: { color: '#4e5670', font: { size: 10 },
             callback: v => '₹' + (v >= 0 ? '' : '-') + Math.abs(v / 1000).toFixed(0) + 'k'
           }}
         }
@@ -1174,6 +1775,124 @@ function destroyCharts() {
   charts = {};
 }
 
+// EMPTY MOCK STATE
+function renderEmptyMockState(hasProfile = false, hasGoals = false) {
+  const el = document.getElementById('dashboard-content');
+  if (!el) return;
+
+  const html = `
+  <div class="grid2 mb24" style="align-items: center">
+    <div class="wizard-card">
+      <div class="wiz-title">🚀 Welcome to Money Mirror!</div>
+      <p class="wiz-subtitle mb16" style="font-size: 0.8rem; color: var(--text2); line-height: 1.4;">
+        Start here &rarr; Tell us your income and expenses &rarr; Add 1&ndash;2 goals &rarr; See your future.
+      </p>
+      
+      <div class="wiz-step ${hasProfile ? 'completed' : 'active'}">
+        <div class="wiz-num">${hasProfile ? '✓' : '1'}</div>
+        <div class="wiz-content">
+          <div class="wiz-heading">Set up your profile</div>
+          <div class="wiz-body">Tell us your income, savings, rent, and discretionary bills.</div>
+          <button class="btn btn-primary btn-sm mt8" onclick="showPage('settings')">${hasProfile ? 'Update settings' : 'Set up profile'}</button>
+        </div>
+      </div>
+      
+      <div class="wiz-step ${!hasProfile ? 'disabled' : (hasGoals ? 'completed' : 'active')}">
+        <div class="wiz-num">${hasGoals ? '✓' : '2'}</div>
+        <div class="wiz-content">
+          <div class="wiz-heading">Add your goals</div>
+          <div class="wiz-body">Define what you are saving for (e.g., new laptop, higher studies).</div>
+          <button class="btn btn-ghost btn-sm mt8" ${hasProfile ? '' : 'disabled'} onclick="showPage('goals')">${hasGoals ? 'Manage goals' : 'Add goals'}</button>
+        </div>
+      </div>
+
+      <div class="wiz-step ${!hasProfile ? 'disabled' : 'active'}">
+        <div class="wiz-num">3</div>
+        <div class="wiz-content">
+          <div class="wiz-heading">Run simulation</div>
+          <div class="wiz-body">Run your financial twin baseline and stress scenarios to see projections.</div>
+          <div class="flex fgap8 mt8">
+            <button class="btn btn-green btn-sm" ${hasProfile ? '' : 'disabled'} onclick="showPage('simulations')">Run simulation</button>
+            <button class="btn btn-ghost btn-sm" onclick="runSampleSimulation()">Try sample case</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Preview Placeholder (Realistic student data mockup) -->
+    <div style="opacity: 0.4; pointer-events: none" class="flex" style="flex-direction:column; gap:16px">
+      <div class="card" style="padding: 16px">
+        <div class="mc-lbl">DEMO PREVIEW MODEL</div>
+        <div class="grid2 mt12">
+          <div class="mcard" style="--mc-accent:var(--green)">
+            <div class="mc-lbl">Runway</div>
+            <div class="mc-val" style="color:var(--green)">12<span style="font-size:.8rem;color:var(--text2)"> mo</span></div>
+          </div>
+          <div class="mcard" style="--mc-accent:var(--blue)">
+            <div class="mc-lbl">Surplus Rate</div>
+            <div class="mc-val" style="color:var(--blue)">22.0%</div>
+          </div>
+        </div>
+        <div class="chart-card mt16" style="padding:12px">
+          <div class="chart-header" style="margin-bottom:8px"><span class="fs11 fw600">Sample projected savings timeline</span></div>
+          <div style="height: 100px; background: rgba(255,255,255,0.02); border-radius: 8px; display:flex; align-items:center; justify-content:center">
+            <span class="fs11 c3">[Line chart visualization placeholder]</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+  el.innerHTML = html;
+}
+
+// SAMPLE SIMULATION GENERATOR
+async function runSampleSimulation() {
+  if (apiBusy) return;
+  showSpinner('Populating student sandbox with realistic UPI data…');
+  apiBusy = true;
+  try {
+    // 1. Prefill Profile Fields
+    const sampleProfile = {
+      income: 65000, other_income: 5000, savings: 120000, min_balance: 15000, safety_target: 6.0,
+      rent: 15000, utilities: 2500, insurance: 1000, subscriptions: 800,
+      food: 6000, transport: 3000, dining: 4000, shopping: 3000, misc: 2000,
+      emis: [{ name: "Bike loan", amount: 4000 }], horizon_months: 12
+    };
+    await api('PUT', '/api/profile', sampleProfile);
+    
+    // 2. Create Goals
+    await api('POST', '/api/goals', { name: "Buy Laptop", target_amount: 45000, target_months: 6, category: "gadgets" });
+    await api('POST', '/api/goals', { name: "MS Prep studies", target_amount: 80000, target_months: 12, category: "education" });
+
+    // 3. Create Scenario templates
+    await api('POST', '/api/scenarios', { name: "30% Salary Cut (6 mo)", scenario_type: "salary-cut", params: { cut: 30, dur: 6, start: 2 } });
+    await api('POST', '/api/scenarios', { name: "Rent Hike (+₹2,000)", scenario_type: "rent-hike", params: { amount: 2000, start: 1 } });
+
+    // 4. Trigger simulation with salary-cut selected
+    await loadScenarios();
+    await loadGoals();
+    
+    // Select first scenario for demo comparison
+    if (savedScenarios.length > 0) {
+      selectedSimScenarios.add(savedScenarios[0].id);
+    }
+    
+    const result = await api('POST', '/api/simulate', { scenario_ids: [...selectedSimScenarios], simulation_mode: "moderate" });
+    lastResult = result;
+    try { sessionStorage.setItem('mm_last_sim', JSON.stringify(result)); } catch (e) {}
+    
+    renderDashboard(result);
+    await showPage('dashboard');
+    toast('Student sandbox simulated successfully! ✓');
+  } catch(e) {
+    toast('Sandbox setup failed: ' + e.message);
+  } finally {
+    apiBusy = false;
+    hideSpinner();
+  }
+}
+
+// HISTORY LOAD
 async function loadHistory() {
   try {
     const data = await api('GET', '/api/simulations');
@@ -1181,7 +1900,7 @@ async function loadHistory() {
     const el = document.getElementById('history-list');
     if (!el) return;
     if (!runs.length) {
-      el.innerHTML = `<div class="empty"><div class="empty-icon">📜</div><div class="empty-text">No simulation history yet.<br/>Run your first simulation to see results here.</div></div>`;
+      el.innerHTML = `<div class="empty"><div class="empty-icon">📜</div><div class="empty-text">No simulations yet. Run your first to see history.</div></div>`;
       return;
     }
     const riskLabel = { comfortable: 'Comfortable', caution: 'Caution', high: 'High risk' };
@@ -1205,6 +1924,7 @@ async function loadHistory() {
     }).join('');
   } catch(e) {}
 }
+
 async function loadHistoryRun(id) {
   showSpinner('Loading simulation…');
   try {
@@ -1217,6 +1937,7 @@ async function loadHistoryRun(id) {
   finally { hideSpinner(); }
 }
 
+// HELPERS
 function show(id) {
   const el = document.getElementById(id);
   if (!el) return;

@@ -45,12 +45,52 @@ def build_profile_dict(p: Any) -> dict:
     }
 
 
-def simulate_timeline(profile: dict, scenario: dict | None, months: int) -> list[float]:
+def simulate_timeline(
+    profile: dict,
+    scenario: dict | None,
+    months: int,
+    simulation_mode: str = "moderate",
+    goals: list[dict] | None = None,
+) -> tuple[list[float], list[dict]]:
     balances = [profile["savings"]]
+    
+    # Determine interest rate and variable expense multiplier
+    mode = simulation_mode.lower()
+    if mode == "conservative":
+        monthly_rate = 0.04 / 12
+        var_multiplier = 1.10
+    elif mode == "aggressive":
+        monthly_rate = 0.12 / 12
+        var_multiplier = 0.95
+    else:  # moderate
+        monthly_rate = 0.08 / 12
+        var_multiplier = 1.0
+
+    base_var_expenses = profile["variable"] * var_multiplier
+    base_total_expenses = profile["fixed"] + base_var_expenses + profile["total_emi"]
+
+    active_goals = []
+    if goals:
+        for g in goals:
+            active_goals.append({
+                "id": g.get("id"),
+                "name": g.get("name"),
+                "target_amount": g.get("target_amount"),
+                "target_months": g.get("target_months"),
+                "category": g.get("category"),
+                "status": "pending",
+                "achieved_month": None,
+                "probability": 0.0
+            })
+
     for t in range(months):
         prev = balances[-1]
+        
+        # Savings grow via interest accrued on the start-of-month balance
+        growth = prev * monthly_rate
+        
         inc = profile["income"]
-        exp = profile["total_expenses"]
+        exp = base_total_expenses
         m = t + 1
 
         if scenario:
@@ -72,12 +112,35 @@ def simulate_timeline(profile: dict, scenario: dict | None, months: int) -> list
                 else:
                     exp += profile["rent"] * float(par.get("pct", 10)) / 100
             elif st == "lifestyle-up" and m >= s:
-                exp += profile["variable"] * float(par.get("pct", 20)) / 100
+                exp += base_var_expenses * float(par.get("pct", 20)) / 100
             elif st == "medical" and m == int(par.get("month", 1)):
                 exp += float(par.get("amount", 50000))
 
-        balances.append(prev + inc - exp)
-    return balances
+        new_bal = prev + growth + inc - exp
+
+        # Check for active goals maturing in month m
+        for g in active_goals:
+            if g["target_months"] == m and g["status"] == "pending":
+                if new_bal >= g["target_amount"] + profile["min_balance"]:
+                    new_bal -= g["target_amount"]
+                    g["status"] = "achieved"
+                    g["achieved_month"] = m
+                    g["probability"] = 1.0
+                else:
+                    g["status"] = "missed"
+                    g["achieved_month"] = None
+                    surplus = new_bal - profile["min_balance"]
+                    g["probability"] = max(0.0, min(1.0, surplus / g["target_amount"])) if g["target_amount"] > 0 else 0.0
+
+        balances.append(new_bal)
+
+    # Calculate probabilities for pending goals maturing beyond simulation horizon
+    for g in active_goals:
+        if g["status"] == "pending":
+            surplus = balances[-1] - profile["min_balance"]
+            g["probability"] = max(0.0, min(1.0, surplus / g["target_amount"])) if g["target_amount"] > 0 else 0.0
+
+    return balances, active_goals
 
 
 def calc_metrics(profile: dict, balances: list[float]) -> dict:
@@ -162,6 +225,27 @@ def generate_insights(profile: dict, base_metrics: dict, scenario_results: list)
             f"Your emergency fund covers {m['emergency_fund_ratio']:.1f} months of expenses. "
             f"Aim for at least {cfg.ef_months_recommended_min:.0f} months."
         )
+
+    # 10% Savings Nudge calculation
+    try:
+        prof_10 = profile.copy()
+        trimmed_var = profile.get("variable", 0) * 0.90
+        prof_10["variable"] = trimmed_var
+        prof_10["total_expenses"] = profile["fixed"] + trimmed_var + profile["total_emi"]
+        
+        horizon = profile.get("horizon", 12)
+        bals_base, _ = simulate_timeline(profile, None, horizon, "moderate")
+        bals_10, _ = simulate_timeline(prof_10, None, horizon, "moderate")
+        m_10 = calc_metrics(prof_10, bals_10)
+        
+        extra_savings = bals_10[-1] - bals_base[-1]
+        if extra_savings > 0:
+            lines.append(
+                f"💡 What-if Nudge: Reducing discretionary spending by 10% (save {fmt(profile.get('variable', 0) * 0.10)}/month) "
+                f"would increase your savings by {fmt(extra_savings)} in {horizon} months and support a safety runway of {m_10['runway']} months."
+            )
+    except Exception:
+        pass
 
     names = {
         "salary-cut": "A salary cut",

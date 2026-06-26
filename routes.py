@@ -10,9 +10,9 @@ from sqlalchemy.orm import Session
 
 from auth_utils import create_token, hash_password, validate_password, verify_password
 from config import get_settings
-from database import FinancialProfile, Scenario, SimulationRun, User
+from database import FinancialProfile, Scenario, SimulationRun, User, Goal
 from deps import get_current_user, get_db
-from schemas import ProfileIn, RegisterRequest, ScenarioIn, SimulateRequest, TokenResponse
+from schemas import ProfileIn, RegisterRequest, ScenarioIn, SimulateRequest, TokenResponse, GoalIn, GoalOut
 from simulation import (
     SCENARIO_TYPES,
     build_profile_dict,
@@ -66,16 +66,43 @@ def _month_labels(months: int) -> list[str]:
     ]
 
 
-def run_simulation_for_profile(p: FinancialProfile, scenario_rows: list[Scenario]) -> dict:
+def run_simulation_for_profile(
+    p: FinancialProfile,
+    scenario_rows: list[Scenario],
+    simulation_mode: str = "moderate",
+    goals: list[Goal] = None,
+) -> dict:
     """Build full simulation payload from a profile and scenario ORM rows."""
     prof = build_profile_dict(p)
     months = p.horizon_months
-    base_balances = simulate_timeline(prof, None, months)
+    
+    # Pack goals into dicts to pass to pure python simulation module
+    goals_dicts = []
+    if goals:
+        for g in goals:
+            goals_dicts.append({
+                "id": g.id,
+                "name": g.name,
+                "target_amount": g.target_amount,
+                "target_months": g.target_months,
+                "category": g.category
+            })
+
+    # Add horizon to profile for insights helper
+    prof["horizon"] = months
+
+    base_balances, base_goals = simulate_timeline(prof, None, months, simulation_mode, goals_dicts)
     base_metrics = calc_metrics(prof, base_balances)
 
     scenario_results = []
     for s in scenario_rows:
-        bals = simulate_timeline(prof, {"scenario_type": s.scenario_type, "params": s.params or {}}, months)
+        bals, scen_goals = simulate_timeline(
+            prof,
+            {"scenario_type": s.scenario_type, "params": s.params or {}},
+            months,
+            simulation_mode,
+            goals_dicts
+        )
         mets = calc_metrics(prof, bals)
         scenario_results.append(
             {
@@ -85,6 +112,7 @@ def run_simulation_for_profile(p: FinancialProfile, scenario_rows: list[Scenario
                 "params": s.params,
                 "balances": [round(b) for b in bals],
                 "metrics": mets,
+                "goals": scen_goals,
                 "explanation": generate_scenario_explanation(
                     prof, s.scenario_type, s.params or {}, mets, base_metrics
                 ),
@@ -105,6 +133,7 @@ def run_simulation_for_profile(p: FinancialProfile, scenario_rows: list[Scenario
         "baseline": {
             "balances": [round(b) for b in base_balances],
             "metrics": base_metrics,
+            "goals": base_goals,
             "explanation": generate_baseline_explanation(prof, base_metrics),
         },
         "scenarios": scenario_results,
@@ -289,12 +318,80 @@ def simulate(req: SimulateRequest, user: User = Depends(get_current_user), db: S
     if missing:
         raise HTTPException(404, f"Scenario(s) not found or inactive: {missing}")
 
-    result = run_simulation_for_profile(p, scenario_rows)
-    run = SimulationRun(user_id=user.id, profile_snapshot=build_profile_dict(p), scenario_ids=scenario_ids, result=result)
+    # Retrieve user's active goals
+    goals = db.query(Goal).filter(Goal.user_id == user.id, Goal.is_active == True).all()
+
+    result = run_simulation_for_profile(p, scenario_rows, req.simulation_mode, goals)
+    run = SimulationRun(
+        user_id=user.id,
+        profile_snapshot=build_profile_dict(p),
+        scenario_ids=scenario_ids,
+        result=result
+    )
     db.add(run)
     db.commit()
 
     return result
+
+
+# ── GOALS CRUD ────────────────────────────
+@router.get("/goals", response_model=list[GoalOut])
+def list_goals(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return db.query(Goal).filter(Goal.user_id == user.id, Goal.is_active == True).all()
+
+
+@router.post("/goals", response_model=GoalOut)
+def create_goal(data: GoalIn, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    if not data.name.strip():
+        raise HTTPException(400, "Goal name cannot be empty.")
+    if data.target_amount <= 0:
+        raise HTTPException(400, "Target amount must be greater than zero.")
+    if data.target_months <= 0:
+        raise HTTPException(400, "Target timeline must be at least 1 month.")
+    
+    g = Goal(
+        user_id=user.id,
+        name=data.name.strip(),
+        target_amount=data.target_amount,
+        target_months=data.target_months,
+        category=data.category
+    )
+    db.add(g)
+    db.commit()
+    db.refresh(g)
+    return g
+
+
+@router.put("/goals/{gid}", response_model=GoalOut)
+def update_goal(gid: int, data: GoalIn, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    g = db.query(Goal).filter(Goal.id == gid, Goal.user_id == user.id, Goal.is_active == True).first()
+    if not g:
+        raise HTTPException(404, "Goal not found")
+    if not data.name.strip():
+        raise HTTPException(400, "Goal name cannot be empty.")
+    if data.target_amount <= 0:
+        raise HTTPException(400, "Target amount must be greater than zero.")
+    if data.target_months <= 0:
+        raise HTTPException(400, "Target timeline must be at least 1 month.")
+
+    g.name = data.name.strip()
+    g.target_amount = data.target_amount
+    g.target_months = data.target_months
+    g.category = data.category
+    
+    db.commit()
+    db.refresh(g)
+    return g
+
+
+@router.delete("/goals/{gid}")
+def delete_goal(gid: int, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    g = db.query(Goal).filter(Goal.id == gid, Goal.user_id == user.id, Goal.is_active == True).first()
+    if not g:
+        raise HTTPException(404, "Goal not found")
+    g.is_active = False
+    db.commit()
+    return {"message": "Goal deleted"}
 
 
 @router.get("/simulations")

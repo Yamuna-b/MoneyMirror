@@ -44,5 +44,27 @@ class ScenarioIn(BaseModel):
     params: dict = Field(default_factory=dict)
 
 
+class GoalIn(BaseModel):
+    name: str
+    target_amount: float
+    target_months: int
+    category: str = "other"
+
+
+class GoalOut(BaseModel):
+    id: int
+    user_id: int
+    name: str
+    target_amount: float
+    target_months: int
+    category: str
+    is_active: bool
+    created_at: Any
+
+    class Config:
+        from_attributes = True
+
+
 class SimulateRequest(BaseModel):
     scenario_ids: List[int] = Field(default_factory=list)
+    simulation_mode: str = "moderate"
