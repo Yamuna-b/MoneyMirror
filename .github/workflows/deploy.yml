@@ -50,5 +50,5 @@ jobs:
         git config --global user.email "actions@github.com"
         git config --global user.name "GitHub Actions"
         # Push the main branch to Hugging Face Spaces remote repository
-        git remote add hf https://Yamuna-b:$HF_TOKEN@huggingface.co/spaces/Yamuna-b/MoneyMirror
+        git remote add hf https://yamunabalamurugan:$HF_TOKEN@huggingface.co/spaces/yamunabalamurugan/MoneyMirror
         git push --force hf main
