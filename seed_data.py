@@ -52,9 +52,9 @@ USERS = [
         },
         "scenarios": [
             {"name": "What if my salary gets cut 25%?", "scenario_type": "salary-cut", "params": {"cut": 25, "dur": 4, "start": 2}},
-            {"name": "Bike loan — Hero Splendor", "scenario_type": "new-emi", "params": {"amount": 3200, "dur": 24, "start": 1}},
-            {"name": "Landlord hikes rent ₹2k", "scenario_type": "rent-hike", "params": {"amount": 2000, "start": 3}},
-            {"name": "Job loss — worst case", "scenario_type": "job-loss", "params": {"dur": 3, "start": 1}},
+            {"name": "Bike loan - Hero Splendor", "scenario_type": "new-emi", "params": {"amount": 3200, "dur": 24, "start": 1}},
+            {"name": "Landlord hikes rent Rs. 2k", "scenario_type": "rent-hike", "params": {"amount": 2000, "start": 3}},
+            {"name": "Job loss - worst case", "scenario_type": "job-loss", "params": {"dur": 3, "start": 1}},
         ],
     },
     {
@@ -86,7 +86,7 @@ USERS = [
         "scenarios": [
             {"name": "Switch to lower-paying startup", "scenario_type": "salary-cut", "params": {"cut": 30, "dur": 12, "start": 1}},
             {"name": "Medical emergency", "scenario_type": "medical", "params": {"amount": 80000, "month": 3}},
-            {"name": "Lifestyle upgrade — new flat", "scenario_type": "lifestyle-up", "params": {"pct": 25, "start": 2}},
+            {"name": "Lifestyle upgrade - new flat", "scenario_type": "lifestyle-up", "params": {"pct": 25, "start": 2}},
         ],
     },
 ]
@@ -97,7 +97,7 @@ def clear_existing(db) -> None:
     db.query(Scenario).delete()
     db.query(FinancialProfile).delete()
     db.query(User).delete()
-    print("✓ Cleared existing data")
+    print("OK: Cleared existing data")
 
 
 def seed() -> None:
@@ -122,7 +122,7 @@ def seed() -> None:
             profile = FinancialProfile(user_id=user.id, **p_data)
             db.add(profile)
             db.flush()
-            print(f"    ✓ User + profile (ID={user.id})")
+            print(f"    [OK] User + profile (ID={user.id})")
 
             scenario_rows: list[Scenario] = []
             for s in ud["scenarios"]:
@@ -136,7 +136,7 @@ def seed() -> None:
                 db.add(row)
                 db.flush()
                 scenario_rows.append(row)
-                print(f"    ✓ Scenario: {s['name']}")
+                print(f"    [OK] Scenario: {s['name']}")
 
             db.refresh(profile)
             result = run_simulation_for_profile(profile, scenario_rows)
@@ -151,19 +151,19 @@ def seed() -> None:
                 )
             )
             bm = result["baseline"]["metrics"]
-            print(f"    ✓ Simulation run saved")
-            print(f"\n    📊 {ud['name']}: runway {bm['runway']} mo · risk {bm['risk_level']} · DTI {bm['dti']*100:.1f}%")
+            print(f"    [OK] Simulation run saved")
+            print(f"\n    [REPORT] {ud['name']}: runway {bm['runway']} mo | risk {bm['risk_level']} | DTI {bm['dti']*100:.1f}%")
 
         db.commit()
     finally:
         db.close()
 
-    print("\n" + "═" * 60)
-    print("  ✅  SEEDING COMPLETE")
-    print("═" * 60)
+    print("\n" + "=" * 60)
+    print("  [SUCCESS] SEEDING COMPLETE")
+    print("=" * 60)
     print("\n  Log in at http://localhost:8000 with:")
     for ud in USERS:
-        print(f"  👤  {ud['email']}  /  {ud['password']}")
+        print(f"  *  {ud['email']}  /  {ud['password']}")
     print()
 
 
@@ -171,6 +171,6 @@ if __name__ == "__main__":
     try:
         seed()
     except Exception as exc:
-        print(f"\n❌  Seeding failed: {exc}", file=sys.stderr)
+        print(f"\n[ERROR] Seeding failed: {exc}", file=sys.stderr)
         print("    Start the backend once so tables exist: python money_mirror_backend.py\n", file=sys.stderr)
         sys.exit(1)
