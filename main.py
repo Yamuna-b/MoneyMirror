@@ -98,6 +98,7 @@ def create_app() -> FastAPI:
             "version": "2.1.0",
             "environment": cfg.environment,
             "database": db_status,
+            "dialect": engine.dialect.name,
         }
 
     return app
