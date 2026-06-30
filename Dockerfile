@@ -11,8 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 8000
+# Support Hugging Face Spaces (7860) and Render dynamic ports
+EXPOSE 7860 8000
 
-# Set MM_SECRET_KEY and MM_DATABASE_URL at runtime, e.g.:
-# docker run -e MM_SECRET_KEY=... -e MM_DATABASE_URL=... -p 8000:8000 money-mirror
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-7860}"]
