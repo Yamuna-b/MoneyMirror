@@ -1,13 +1,3 @@
----
-title: MoneyMirror
-emoji: 🪞
-colorFrom: blue
-colorTo: indigo
-sdk: docker
-app_port: 7860
-pinned: false
----
-
 # Money Mirror 🪞
 
 **Money Mirror** is a full-stack financial digital twin simulator. It allows users to model their financial profile, run stress-test simulations with dynamic "what-if" scenarios (job loss, salary cuts, rent hikes, medical emergencies), and analyze their safety runway, risk metrics, and cash flow trends.
