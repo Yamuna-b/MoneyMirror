@@ -1,3 +1,13 @@
+---
+title: MoneyMirror
+emoji: 🪞
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # Money Mirror
 
 **Personal financial digital twin for Indian UPI-era money life** — enter monthly income, EMIs, fixed and variable expenses, and savings; add what‑if scenarios (salary cut, job loss, new EMI, rent hike, lifestyle change, medical emergency); run a deterministic month‑by‑month simulation and see balance over time, safety runway, risk label, and short explanations.
