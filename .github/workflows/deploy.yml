@@ -1,0 +1,54 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        cache: 'pip'
+        
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install httpx pytest
+        
+    - name: Run Pytest Suite
+      run: |
+        python -m pytest
+
+  deploy-huggingface:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Push to Hugging Face Spaces
+      env:
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      run: |
+        if [ -z "$HF_TOKEN" ]; then
+          echo "HF_TOKEN secret is not set. Skipping automated deployment."
+          exit 0
+        fi
+        git config --global user.email "actions@github.com"
+        git config --global user.name "GitHub Actions"
+        # Push the main branch to Hugging Face Spaces remote repository
+        git remote add hf https://Yamuna-b:$HF_TOKEN@huggingface.co/spaces/Yamuna-b/MoneyMirror
+        git push --force hf main
