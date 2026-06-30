@@ -568,7 +568,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
             <span class="fhint">Wealth growth rate and expense buffers modeled.</span>
           </div>
 
-          <button class="btn btn-green" style="width:100%" onclick="runSimulation()">🔮 Try a what-if scenario</button>
+          <button class="btn btn-green" style="width:100%" onclick="runSimulation()">Run What-If Simulation</button>
         </div>
       </div>
     </div>
@@ -712,8 +712,8 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
       </div>
 
       <div class="flex fgap12">
-        <button class="btn btn-primary" onclick="saveProfile()">💾 Save Settings</button>
-        <button class="btn btn-green" onclick="saveProfile(true)">🔮 Save &amp; Run Twin Baseline</button>
+        <button class="btn btn-primary" onclick="saveProfile()">Save Settings</button>
+        <button class="btn btn-green" onclick="saveProfile(true)">Save &amp; Run Twin Baseline</button>
       </div>
     </div>
 
@@ -1691,7 +1691,7 @@ function renderDashboard(r) {
   }
 
   html += `<div class="flex fgap12 mt24">
-    <button class="btn btn-primary" onclick="showPage('simulations')">🔮 Test a what-if scenario</button>
+    <button class="btn btn-primary" onclick="showPage('simulations')">Test a what-if scenario</button>
     <button class="btn btn-ghost" onclick="showPage('settings')">Update Profile</button>
   </div>`;
 
@@ -1909,7 +1909,7 @@ async function loadHistory() {
       const br = r.baseline_risk ? (riskLabel[r.baseline_risk] || r.baseline_risk) : '—';
       return `
       <div class="hist-item" onclick="loadHistoryRun(${r.id})">
-        <div style="font-size:1.2rem">🔮</div>
+        <div style="font-size:1.2rem">📊</div>
         <div style="flex:1;min-width:0">
           <div class="hi-date">${(() => {
             const raw = r.created_at.includes('T') ? r.created_at : r.created_at.replace(' ', 'T');
