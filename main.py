@@ -31,7 +31,13 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
         response.headers["X-Content-Type-Options"] = "nosniff"
-        response.headers["X-Frame-Options"] = "DENY"
+        
+        # If running inside Hugging Face Spaces, allow framing from Hugging Face domains
+        if "SPACE_ID" in os.environ:
+            response.headers["Content-Security-Policy"] = "frame-ancestors 'self' https://*.huggingface.co https://huggingface.co"
+        else:
+            response.headers["X-Frame-Options"] = "DENY"
+            
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         return response
 
